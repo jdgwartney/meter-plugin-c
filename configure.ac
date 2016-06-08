@@ -6,5 +6,10 @@ AC_CONFIG_HEADERS([config.h])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
+AM_INIT_AUTOMAKE
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h])
+
 
 AC_OUTPUT
