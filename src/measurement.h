@@ -13,8 +13,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "plugin.h"
+#ifndef METER_PLUGIN_MEASUREMENT_H
+#define METER_PLUGIN_MEASUREMENT_H
 
-int main(int argc, char * argv[]) {
-    return plugin_run(argc, argv);
-}
+#include <stdlib.h>
+#include <time.h>
+
+// Maximum size of a metric definition name
+#define METRIC_NAME_MAX  128
+
+// Maximum size of a source name
+#define SOURCE_NAME_MAX 128
+
+struct measurement {
+    char metric[METRIC_NAME_MAX+1];
+    double value;
+    char source[SOURCE_NAME_MAX+1];
+    time_t timestamp;
+};
+
+typedef struct measurement MEASUREMENT;
+
+void measurement_output(MEASUREMENT *m);
+
+#endif //METER_PLUGIN_MEASUREMENT_H

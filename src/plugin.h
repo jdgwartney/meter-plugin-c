@@ -13,8 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "plugin.h"
 
-int main(int argc, char * argv[]) {
-    return plugin_run(argc, argv);
-}
+#ifndef METER_PLUGIN_PLUGIN_H
+#define METER_PLUGIN_PLUGIN_H
+
+int plugin_run(int argc, char * argv[]);
+
+#endif //METER_PLUGIN_PLUGIN_H

@@ -10,6 +10,6 @@ AC_PROG_INSTALL
 # i.e. this program doesn't follow the gnu coding standards, and doesn't have
 # ChangeLog, COPYING, AUTHORS, INSTALL, README etc. files.
 # AM_INIT_AUTOMAKE([-Wall -Werror foreign])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

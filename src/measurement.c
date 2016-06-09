@@ -13,8 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "plugin.h"
+#include <stdio.h>
+#include "measurement.h"
 
-int main(int argc, char * argv[]) {
-    return plugin_run(argc, argv);
+void measurement_output(MEASUREMENT *m) {
+    printf("%s %f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
 }

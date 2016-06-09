@@ -1,6 +1,6 @@
 [
   {
-    "name": "EXAMPLE_COUNTS",
+    "name": "EXAMPLE_COUNT",
     "description": "A metric used to track counts of something",
     "displayName": "Example Count",
     "displayNameShort": "Ex. Cnt.",

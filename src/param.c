@@ -13,8 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "plugin.h"
+#include <stdlib.h>
+#include "param.h"
 
-int main(int argc, char * argv[]) {
-    return plugin_run(argc, argv);
+
+PLUGIN_PARAMETERS * get_parameters(const char *path) {
+    PLUGIN_PARAMETERS *p = malloc(sizeof(PLUGIN_PARAMETERS));
+    return p;
 }

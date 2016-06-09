@@ -13,8 +13,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "plugin.h"
 
-int main(int argc, char * argv[]) {
-    return plugin_run(argc, argv);
+#include "plugin.h"
+#include "measurement.h"
+#include "metric.h"
+#include "param.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+
+void get_measurement(MEASUREMENT *m) {
+    strcpy(m->metric, "EXAMPLE_COUNT");
+    m->value = 1;
+    strcpy(m->source,"foo");
+    m->timestamp = time(NULL);
+}
+
+int plugin_run(int argc, char * argv[]) {
+
+    PLUGIN_PARAMETERS *param = get_parameters(DEFAULT_PARAMETERS_PATH);
+    if (param == NULL) {
+        exit(1);
+    }
+
+    while(1) {
+        MEASUREMENT m;
+        sleep(1);
+        get_measurement(&m);
+        measurement_output(&m);
+    }
 }

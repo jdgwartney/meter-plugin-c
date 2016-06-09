@@ -13,8 +13,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "plugin.h"
+#ifndef METER_PLUGIN_PARAM_H
+#define METER_PLUGIN_PARAM_H
 
-int main(int argc, char * argv[]) {
-    return plugin_run(argc, argv);
-}
+#define DEFAULT_PARAMETERS_PATH "./param.json"
+
+struct plugin_parameters {
+    char p[32];
+};
+
+typedef struct plugin_parameters PLUGIN_PARAMETERS;
+
+PLUGIN_PARAMETERS * get_parameters(const char *path);
+
+
+#endif //METER_PLUGIN_PARAM_H
