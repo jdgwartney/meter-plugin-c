@@ -1,3 +1,3 @@
 bin_PROGRAMS=plugin
-plugin_SOURCES=src/main.c src/metric.c src/log.c src/measurement.c src/param.c src/plugin.c
+plugin_SOURCES=src/main.c src/metric.c src/metric.h src/log.c src/log.h src/measurement.c src/mesurement.h src/param.c src/param.h src/plugin.c src/plugin.h
 
