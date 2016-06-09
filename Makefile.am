@@ -1,3 +1,3 @@
-bin_PROGRAMS=meter_plugin
-meter_pluginSOURCES=src/main.c
+bin_PROGRAMS=plugin
+plugin_SOURCES=src/main.c
 
