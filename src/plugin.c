@@ -17,13 +17,9 @@
 #include "plugin.h"
 #include "measurement.h"
 #include "param.h"
-#include <stdio.h>
-#include <string.h>
 #include <unistd.h>
 
-
-
-int plugin_run(int argc, char * argv[]) {
+int plugin_run() {
 
     // Initialize the measurement services
     measurement_initialize();

@@ -13,16 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+#include <math.h>
 #include <stdio.h>
+#include <string.h>
 #include "measurement.h"
 
 void measurement_initialize() {
     setvbuf(stdout, NULL, _IOLBF, 0);
+    srand(1234);
 }
 
 void measurement_get(MEASUREMENT *m) {
     strcpy(m->metric, "EXAMPLE_COUNT");
-    m->value = 1;
+    double r = rand();
+    double n = r/RAND_MAX;
+    m->value = n;
     strcpy(m->source,"foo");
     m->timestamp = time(NULL);
 }

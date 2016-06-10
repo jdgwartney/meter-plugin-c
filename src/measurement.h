@@ -20,7 +20,7 @@
 #include <time.h>
 
 // Maximum size of a metric definition name
-#define METRIC_NAME_MAX  128
+#define METRIC_NAME_MAX 128
 
 // Maximum size of a source name
 #define SOURCE_NAME_MAX 128

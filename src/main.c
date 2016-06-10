@@ -16,5 +16,5 @@
 #include "plugin.h"
 
 int main(int argc, char * argv[]) {
-    return plugin_run(argc, argv);
+    return plugin_run();
 }

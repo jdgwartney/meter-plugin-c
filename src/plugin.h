@@ -17,6 +17,6 @@
 #ifndef METER_PLUGIN_PLUGIN_H
 #define METER_PLUGIN_PLUGIN_H
 
-int plugin_run(int argc, char * argv[]);
+int plugin_run();
 
 #endif //METER_PLUGIN_PLUGIN_H
