@@ -21,20 +21,12 @@
 #include <string.h>
 #include <unistd.h>
 
-void initialize() {
-    setvbuf(stdout, NULL, _IOLBF, 0);
-}
 
-void get_measurement(MEASUREMENT *m) {
-    strcpy(m->metric, "EXAMPLE_COUNT");
-    m->value = 1;
-    strcpy(m->source,"foo");
-    m->timestamp = time(NULL);
-}
 
 int plugin_run(int argc, char * argv[]) {
 
-    initialize();
+    // Initialize the measurement services
+    measurement_initialize();
 
     PLUGIN_PARAMETERS *param = get_parameters(DEFAULT_PARAMETERS_PATH);
     if (param == NULL) {
@@ -44,7 +36,7 @@ int plugin_run(int argc, char * argv[]) {
     while(1) {
         MEASUREMENT m;
         sleep(1);
-        get_measurement(&m);
+        measurement_get(&m);
         measurement_output(&m);
     }
 }

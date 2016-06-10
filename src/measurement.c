@@ -16,6 +16,17 @@
 #include <stdio.h>
 #include "measurement.h"
 
+void measurement_initialize() {
+    setvbuf(stdout, NULL, _IOLBF, 0);
+}
+
+void measurement_get(MEASUREMENT *m) {
+    strcpy(m->metric, "EXAMPLE_COUNT");
+    m->value = 1;
+    strcpy(m->source,"foo");
+    m->timestamp = time(NULL);
+}
+
 void measurement_output(MEASUREMENT *m) {
     printf("%s %f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
 }
