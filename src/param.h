@@ -16,15 +16,33 @@
 #ifndef METER_PLUGIN_PARAM_H
 #define METER_PLUGIN_PARAM_H
 
+#include <jansson.h>
+
+#define PARAMETER_MAX_STRING 128
+
 #define DEFAULT_PARAMETERS_PATH "./param.json"
 
+typedef char PARAM_BOOLEAN;
+typedef long long PARAM_INTEGER;
+typedef double PARAM_REAL;
+typedef const char * PARAM_STRING;
+
+typedef json_t PARAMETER_ITEM;
+typedef PARAMETER_ITEM * PARAMETER_ITEM_PTR;
+
 struct plugin_parameters {
-    char p[32];
+    size_t count;
+    PARAMETER_ITEM_PTR *items;
 };
 
 typedef struct plugin_parameters PLUGIN_PARAMETERS;
 
-PLUGIN_PARAMETERS * get_parameters(const char *path);
+PLUGIN_PARAMETERS * parameter_load(const char *path);
+
+PARAM_BOOLEAN parameter_get_boolean(PARAMETER_ITEM *item, const char *key);
+PARAM_INTEGER parameter_get_integer(PARAMETER_ITEM *item, const char *key);
+PARAM_REAL parameter_get_real(PARAMETER_ITEM *item, const char *key);
+PARAM_STRING parameter_get_string(PARAMETER_ITEM *item, const char *key);
 
 
 #endif //METER_PLUGIN_PARAM_H

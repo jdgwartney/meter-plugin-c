@@ -17,17 +17,31 @@
 #include "plugin.h"
 #include "measurement.h"
 #include "param.h"
+#include <stdio.h>
 #include <unistd.h>
+
+#define PARAM_FIELD_HOST "host"
+#define PARAM_FIELD_PORT "port"
+#define PARAM_FIELD_SOURCE "source"
+#define PARAM_FIELD_INTERVAL "interval"
 
 int plugin_run() {
 
     // Initialize the measurement services
     measurement_initialize();
 
-    PLUGIN_PARAMETERS *param = get_parameters(DEFAULT_PARAMETERS_PATH);
-    if (param == NULL) {
+    PLUGIN_PARAMETERS *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);
+    if (parameters == NULL) {
         exit(1);
     }
+    PARAM_STRING host = parameter_get_string(parameters->items[0], PARAM_FIELD_HOST);
+    fprintf(stderr, "host: %s\n", host);
+    PARAM_INTEGER port = parameter_get_integer(parameters->items[0], PARAM_FIELD_PORT);
+    fprintf(stderr, "port: %lld\n", port);
+    PARAM_STRING source = parameter_get_string(parameters->items[0], PARAM_FIELD_SOURCE);
+    fprintf(stderr, "source: %s\n", source);
+    PARAM_INTEGER interval = parameter_get_integer(parameters->items[0], PARAM_FIELD_INTERVAL);
+    fprintf(stderr, "interval: %lld\n", interval);
 
     while(1) {
         MEASUREMENT m;
