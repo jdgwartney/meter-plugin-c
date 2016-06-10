@@ -20,7 +20,8 @@
 #include "measurement.h"
 
 double rand_range(int min, int max) {
-    return floor((rand()/(double)RAND_MAX) * ((max - min) + 1)) + min;
+    double rnum =rand()/(double)RAND_MAX;
+    return floor(rnum * ((max - min) + 1)) + min;
 }
 
 void measurement_initialize() {
