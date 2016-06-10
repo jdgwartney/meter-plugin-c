@@ -16,13 +16,14 @@
 
 #include "plugin.h"
 #include "measurement.h"
-#include "metric.h"
 #include "param.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <unistd.h>
+
+void initialize() {
+    setvbuf(stdout, NULL, _IOLBF, 0);
+}
 
 void get_measurement(MEASUREMENT *m) {
     strcpy(m->metric, "EXAMPLE_COUNT");
@@ -32,6 +33,8 @@ void get_measurement(MEASUREMENT *m) {
 }
 
 int plugin_run(int argc, char * argv[]) {
+
+    initialize();
 
     PLUGIN_PARAMETERS *param = get_parameters(DEFAULT_PARAMETERS_PATH);
     if (param == NULL) {
