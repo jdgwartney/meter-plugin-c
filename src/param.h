@@ -23,29 +23,29 @@
 
 #define DEFAULT_PARAMETERS_PATH "./param.json"
 
-typedef char PARAM_BOOLEAN;
-typedef long long PARAM_INTEGER;
-typedef double PARAM_REAL;
-typedef const char * PARAM_STRING;
+typedef char param_boolean_t;
+typedef long long param_integer_t;
+typedef double param_real_t;
+typedef const char * param_string_t;
 
-typedef json_t PARAMETER_ITEM;
-typedef PARAMETER_ITEM * PARAMETER_ITEM_PTR;
+typedef json_t parameter_item_t;
+typedef parameter_item_t * parameter_item_ptr_t;
 
 struct plugin_parameters {
     size_t count;
-    PARAMETER_ITEM_PTR *items;
+    parameter_item_ptr_t *items;
 };
 
-typedef struct plugin_parameters PLUGIN_PARAMETERS;
+typedef struct plugin_parameters plugin_parameters_t;
 
-PLUGIN_PARAMETERS * parameter_load(const char *path);
+plugin_parameters_t * parameter_load(const char *path);
 
 void parameter_initialize(meter_plugin_t *plugin);
 
-PARAM_BOOLEAN parameter_get_boolean(PARAMETER_ITEM *item, const char *key);
-PARAM_INTEGER parameter_get_integer(PARAMETER_ITEM *item, const char *key);
-PARAM_REAL parameter_get_real(PARAMETER_ITEM *item, const char *key);
-PARAM_STRING parameter_get_string(PARAMETER_ITEM *item, const char *key);
+param_boolean_t parameter_get_boolean(parameter_item_t *item, const char *key);
+param_integer_t parameter_get_integer(parameter_item_t *item, const char *key);
+param_real_t parameter_get_real(parameter_item_t *item, const char *key);
+param_string_t parameter_get_string(parameter_item_t *item, const char *key);
 
 
 #endif //METER_PLUGIN_PARAM_H

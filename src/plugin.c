@@ -37,18 +37,22 @@ int plugin_run(meter_plugin_t *plugin) {
 
     initialize_modules(plugin);
 
+    if (plugin->start) {
+        plugin->start(plugin);
+    }
 
-    PLUGIN_PARAMETERS *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);
+
+    plugin_parameters_t *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);
     if (parameters == NULL) {
         exit(1);
     }
-    PARAM_STRING host = parameter_get_string(parameters->items[0], PARAM_FIELD_HOST);
+    param_string_t host = parameter_get_string(parameters->items[0], PARAM_FIELD_HOST);
     fprintf(stderr, "host: %s\n", host);
-    PARAM_INTEGER port = parameter_get_integer(parameters->items[0], PARAM_FIELD_PORT);
+    param_integer_t port = parameter_get_integer(parameters->items[0], PARAM_FIELD_PORT);
     fprintf(stderr, "port: %lld\n", port);
-    PARAM_STRING source = parameter_get_string(parameters->items[0], PARAM_FIELD_SOURCE);
+    param_string_t source = parameter_get_string(parameters->items[0], PARAM_FIELD_SOURCE);
     fprintf(stderr, "source: %s\n", source);
-    PARAM_INTEGER interval = parameter_get_integer(parameters->items[0], PARAM_FIELD_INTERVAL);
+    param_integer_t interval = parameter_get_integer(parameters->items[0], PARAM_FIELD_INTERVAL);
     fprintf(stderr, "interval: %lld\n", interval);
 
     while(1) {

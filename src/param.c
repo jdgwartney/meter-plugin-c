@@ -25,8 +25,8 @@ void parameter_initialize(meter_plugin_t *plugin) {
 
 }
 
-void print_json_type(FILE *file, int json_type) {
-    PLUGIN_PARAMETERS *p = malloc(sizeof(PLUGIN_PARAMETERS));
+static void print_json_type(FILE *file, int json_type) {
+    plugin_parameters_t *p = malloc(sizeof(plugin_parameters_t));
 
     switch(json_type) {
         case JSON_OBJECT:
@@ -64,8 +64,8 @@ void print_json_error(FILE *file, json_error_t error) {
             error.text, error.source, error.line, error.column, error.position);
 }
 
-PLUGIN_PARAMETERS * parameter_load(const char *path) {
-    PLUGIN_PARAMETERS *p = malloc(sizeof(PLUGIN_PARAMETERS));
+plugin_parameters_t * parameter_load(const char *path) {
+    plugin_parameters_t *p = malloc(sizeof(plugin_parameters_t));
     json_t *json;
     json_error_t error;
 
@@ -76,7 +76,7 @@ PLUGIN_PARAMETERS * parameter_load(const char *path) {
         size_t count = json_array_size(items);
 
         p->count = count;
-        p->items = malloc(sizeof(PARAMETER_ITEM_PTR) * count);
+        p->items = malloc(sizeof(parameter_item_ptr_t) * count);
         assert(p->items);
 
         size_t index;
@@ -92,28 +92,28 @@ PLUGIN_PARAMETERS * parameter_load(const char *path) {
     return p;
 }
 
-PARAM_BOOLEAN parameter_get_boolean(PARAMETER_ITEM *item, const char *key) {
+param_boolean_t parameter_get_boolean(parameter_item_t *item, const char *key) {
     json_t * json = json_object_get(item, key);
     assert(json);
     assert(json_typeof(json) == JSON_TRUE || json_typeof(json) == JSON_FALSE);
     return json_boolean_value(json);
 }
 
-PARAM_INTEGER parameter_get_integer(PARAMETER_ITEM *item, const char *key) {
+param_integer_t parameter_get_integer(parameter_item_t *item, const char *key) {
     json_t * json = json_object_get(item, key);
     assert(json);
     assert(json_typeof(json) == JSON_INTEGER);
     return json_integer_value(json);
 }
 
-PARAM_REAL parameter_get_real(PARAMETER_ITEM *item, const char *key) {
+param_real_t parameter_get_real(parameter_item_t *item, const char *key) {
     json_t * json = json_object_get(item, key);
     assert(json);
     assert(json_typeof(json) == JSON_REAL);
     return json_real_value(json);
 }
 
-PARAM_STRING parameter_get_string(PARAMETER_ITEM *item, const char *key) {
+param_string_t parameter_get_string(parameter_item_t *item, const char *key) {
     json_t * json = json_object_get(item, key);
     assert(json);
     assert(json_typeof(json) == JSON_STRING);
