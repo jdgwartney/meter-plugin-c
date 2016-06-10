@@ -36,6 +36,6 @@ void measurement_get(MEASUREMENT *m) {
     m->timestamp = time(NULL);
 }
 
-void measurement_output(MEASUREMENT *m) {
+void measurement_send(MEASUREMENT *m) {
     printf("%s %.3f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
 }

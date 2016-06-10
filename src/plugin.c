@@ -47,6 +47,6 @@ int plugin_run() {
         MEASUREMENT m;
         sleep(1);
         measurement_get(&m);
-        measurement_output(&m);
+        measurement_send(&m);
     }
 }

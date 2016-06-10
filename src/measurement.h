@@ -36,6 +36,6 @@ typedef struct measurement MEASUREMENT;
 
 void measurement_get(MEASUREMENT *m);
 void measurement_initialize();
-void measurement_output(MEASUREMENT *m);
+void measurement_send(MEASUREMENT *m);
 
 #endif //METER_PLUGIN_MEASUREMENT_H
