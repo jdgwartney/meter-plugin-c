@@ -16,22 +16,25 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "measurement.h"
+
+double rand_range(int min, int max) {
+    return floor((rand()/(double)RAND_MAX) * ((max - min) + 1)) + min;
+}
 
 void measurement_initialize() {
     setvbuf(stdout, NULL, _IOLBF, 0);
-    srand(1234);
+    srand(time(NULL));
 }
 
 void measurement_get(MEASUREMENT *m) {
     strcpy(m->metric, "EXAMPLE_COUNT");
-    double r = rand();
-    double n = r/RAND_MAX;
-    m->value = n;
+    m->value = rand_range(0, 99);
     strcpy(m->source,"foo");
     m->timestamp = time(NULL);
 }
 
 void measurement_output(MEASUREMENT *m) {
-    printf("%s %f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
+    printf("%s %8.3f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
 }
