@@ -39,7 +39,7 @@
        "name": "source",
        "description": "Source to use for measurements",
        "type": "string",
-       "default": "Tutorial",
+       "default": "Example",
        "required": true
      },
      {

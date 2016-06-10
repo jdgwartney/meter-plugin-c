@@ -37,5 +37,5 @@ void measurement_get(MEASUREMENT *m) {
 }
 
 void measurement_output(MEASUREMENT *m) {
-    printf("%s %8.3f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
+    printf("%s %.3f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
 }
