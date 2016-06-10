@@ -14,3 +14,7 @@
 // limitations under the License.
 //
 #include "metric.h"
+
+void metric_initialize() {
+
+}

@@ -19,7 +19,6 @@
 #include "metric.h"
 #include "measurement.h"
 #include "param.h"
-#include <stdio.h>
 #include <unistd.h>
 
 #define PARAM_FIELD_HOST "host"
@@ -36,7 +35,7 @@ static void initialize_modules(meter_plugin_t *plugin) {
 
 int plugin_run(meter_plugin_t *plugin) {
 
-    initialize_modules();
+    initialize_modules(plugin);
 
 
     PLUGIN_PARAMETERS *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);

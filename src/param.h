@@ -17,6 +17,7 @@
 #define METER_PLUGIN_PARAM_H
 
 #include <jansson.h>
+#include "plugin.h"
 
 #define PARAMETER_MAX_STRING 128
 
@@ -38,6 +39,8 @@ struct plugin_parameters {
 typedef struct plugin_parameters PLUGIN_PARAMETERS;
 
 PLUGIN_PARAMETERS * parameter_load(const char *path);
+
+void parameter_initialize(meter_plugin_t *plugin);
 
 PARAM_BOOLEAN parameter_get_boolean(PARAMETER_ITEM *item, const char *key);
 PARAM_INTEGER parameter_get_integer(PARAMETER_ITEM *item, const char *key);

@@ -16,4 +16,45 @@
 #ifndef METER_PLUGIN_EVENT_H
 #define METER_PLUGIN_EVENT_H
 
+#include <time.h>
+
+#include "plugin.h"
+
+// ToDo capability to override or make dynamic
+
+#define EVENT_MESSAGE_SIZE 255
+#define EVENT_SOURCE_SIZE 255
+#define EVENT_SENDER_SIZE 255
+#define EVENT_TAGS_SIZE 1024
+#define EVENT_APP_DATA_TYPE_SIZE 32
+#define EVENT_APP_DATA_SIZE 1024
+
+#define EVENT_STRING_M
+
+enum event_type {
+    INFO,
+    WARN,
+    ERROR,
+    CRITICAL
+};
+
+typedef enum event_type event_type_t;
+
+struct event {
+    char message[EVENT_MESSAGE_SIZE+1];
+    event_type_t type;
+    char source[EVENT_SOURCE_SIZE+1];
+    char sender[EVENT_SENDER_SIZE+1];
+    time_t date;
+    char tags[EVENT_TAGS_SIZE];
+    char app_data_type[EVENT_APP_DATA_TYPE_SIZE];
+    char app_data[EVENT_APP_DATA_SIZE];
+};
+
+typedef struct event EVENT;
+
+void event_initialize(meter_plugin_t *plugin);
+void event_send(const char *message, event_type_t type, const char *tags);
+
+
 #endif //METER_PLUGIN_EVENT_H

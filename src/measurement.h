@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "plugin.h"
+
 // Maximum size of a metric definition name
 #define METRIC_NAME_MAX 128
 
@@ -35,7 +37,7 @@ struct measurement {
 typedef struct measurement MEASUREMENT;
 
 void measurement_get(MEASUREMENT *m);
-void measurement_initialize();
+void measurement_initialize(meter_plugin_t *plugin);
 void measurement_send(MEASUREMENT *m);
 
 #endif //METER_PLUGIN_MEASUREMENT_H

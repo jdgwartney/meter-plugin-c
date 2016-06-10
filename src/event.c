@@ -13,4 +13,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+
+#include <stdio.h>
 #include "event.h"
+
+void event_initialize(meter_plugin_t *plugin) {
+
+}
+
+static const char * event_type_strings[] = {
+    "info",
+    "warn",
+    "error",
+    "critical"
+};
+
+static const char * event_type_to_string(event_type_t type) {
+    return event_type_strings[type];
+}
+
+void event_send(const char *message, event_type_t type, const char *tags) {
+    printf("bevent:%s|t:%s|tags:%s\n", message, event_type_to_string(type), tags);
+}
