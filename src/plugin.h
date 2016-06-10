@@ -17,6 +17,31 @@
 #ifndef METER_PLUGIN_PLUGIN_H
 #define METER_PLUGIN_PLUGIN_H
 
-int plugin_run();
+#define PLUGIN_NAME_SIZE 32
+
+struct meter_plugin;
+
+typedef int (*plugin_start_func_t)(struct meter_plugin *plugin);
+typedef int (*plugin_stop_func_t)(struct meter_plugin *plugin);
+typedef int (*plugin_parameter_func_t)(struct meter_plugin *plugin);
+typedef int (*plugin_collector_func_t)(struct meter_plugin *plugin);
+
+enum event_type;
+
+typedef void(*event_send)(const char *message, enum event_type type, const char *tags);
+
+
+struct meter_plugin {
+    char name[PLUGIN_NAME_SIZE];
+    plugin_start_func_t start;
+    plugin_collector_func_t collector;
+    plugin_stop_func_t stop;
+
+    plugin_event_send_func event_send;
+};
+
+typedef struct meter_plugin meter_plugin_t;
+
+int plugin_run(meter_plugin_t *plugin);
 
 #endif //METER_PLUGIN_PLUGIN_H

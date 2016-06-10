@@ -15,6 +15,8 @@
 //
 
 #include "plugin.h"
+#include "event.h"
+#include "metric.h"
 #include "measurement.h"
 #include "param.h"
 #include <stdio.h>
@@ -25,10 +27,17 @@
 #define PARAM_FIELD_SOURCE "source"
 #define PARAM_FIELD_INTERVAL "interval"
 
-int plugin_run() {
+static void initialize_modules(meter_plugin_t *plugin) {
+    event_initialize(plugin);
+    metric_initialize(plugin);
+    measurement_initialize(plugin);
+    parameter_initialize(plugin);
+}
 
-    // Initialize the measurement services
-    measurement_initialize();
+int plugin_run(meter_plugin_t *plugin) {
+
+    initialize_modules();
+
 
     PLUGIN_PARAMETERS *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);
     if (parameters == NULL) {

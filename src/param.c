@@ -16,13 +16,14 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "param.h"
-#include <jansson.h>
 
 #define PARAM_FIELD_ITEMS "items"
 
+void parameter_initialize(meter_plugin_t *plugin) {
+
+}
 
 void print_json_type(FILE *file, int json_type) {
     PLUGIN_PARAMETERS *p = malloc(sizeof(PLUGIN_PARAMETERS));

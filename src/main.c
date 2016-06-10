@@ -16,5 +16,6 @@
 #include "plugin.h"
 
 int main(int argc, char * argv[]) {
-    return plugin_run();
+    meter_plugin_t plugin;
+    return plugin_run(&plugin);
 }
