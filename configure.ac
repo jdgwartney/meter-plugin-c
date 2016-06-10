@@ -5,6 +5,7 @@ AC_CONFIG_SRCDIR([src/main.c])
 # in this dir (build-aux)
 # AC_CONFIG_AUX_DIR([build-aux])
 AC_PROG_CC
+AC_CHECK_LIB(m, floor)
 AC_PROG_INSTALL
 # Init automake, and specify this program use relaxed structures.
 # i.e. this program doesn't follow the gnu coding standards, and doesn't have
