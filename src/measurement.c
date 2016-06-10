@@ -24,7 +24,7 @@ double rand_range(int min, int max) {
     return floor(rnum * ((max - min) + 1)) + min;
 }
 
-void measurement_initialize() {
+void measurement_initialize(meter_plugin_t *plugin) {
     setvbuf(stdout, NULL, _IOLBF, 0);
     srand(time(NULL));
 }
