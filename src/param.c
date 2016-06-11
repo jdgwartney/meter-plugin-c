@@ -18,10 +18,11 @@
 #include <stdlib.h>
 
 #include "param.h"
+#include "plugin.h"
 
 #define PARAM_FIELD_ITEMS "items"
 
-void parameter_initialize(meter_plugin_t *plugin) {
+void parameter_initialize(struct meter_plugin *plugin) {
 
 }
 

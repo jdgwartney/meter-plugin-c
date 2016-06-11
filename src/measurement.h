@@ -19,25 +19,47 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "plugin.h"
+// forward declaration
+struct meter_plugin;
 
 // Maximum size of a metric definition name
-#define METRIC_NAME_MAX 128
+#define MEASUREMENT_METRIC_SIZE 128
 
 // Maximum size of a source name
 #define SOURCE_NAME_MAX 128
 
+typedef char measurement_metric_t[MEASUREMENT_METRIC_SIZE];
+typedef double measurement_value_t;
+typedef char measurement_source_t[SOURCE_NAME_MAX];
+typedef time_t measurement_timestamp_t;
+
 struct measurement {
-    char metric[METRIC_NAME_MAX+1];
-    double value;
-    char source[SOURCE_NAME_MAX+1];
-    time_t timestamp;
+    measurement_metric_t metric;
+    measurement_value_t value;
+    measurement_source_t source;
+    measurement_timestamp_t timestamp;
 };
 
-typedef struct measurement MEASUREMENT;
+typedef struct measurement measurement_t;
 
-void measurement_get(MEASUREMENT *m);
-void measurement_initialize(meter_plugin_t *plugin);
-void measurement_send(MEASUREMENT *m);
+enum measurement_sink_type {
+    API,
+    RPC,
+    STDOUT
+};
+
+
+typedef void (*measurement_send_func)(measurement_metric_t metric,
+                                      measurement_value_t value,
+                                      measurement_source_t source,
+                                      measurement_timestamp_t *timestamp);
+
+
+// Private API
+void measurement_initialize(struct meter_plugin *plugin);
+
+// Public API
+measurement_send_func measurement_get_sink(enum measurement_sink_type type);
+
 
 #endif //METER_PLUGIN_MEASUREMENT_H

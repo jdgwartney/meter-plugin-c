@@ -17,25 +17,34 @@
 #ifndef METER_PLUGIN_PLUGIN_H
 #define METER_PLUGIN_PLUGIN_H
 
+#include "collector.h"
+#include "param.h"
+
 #define PLUGIN_NAME_SIZE 32
 
 struct meter_plugin;
 
+typedef int (*plugin_init_func_t)(struct meter_plugin *plugin);
 typedef int (*plugin_start_func_t)(struct meter_plugin *plugin);
 typedef int (*plugin_stop_func_t)(struct meter_plugin *plugin);
-typedef int (*plugin_parameter_func_t)(struct meter_plugin *plugin);
-typedef int (*plugin_collector_init_func_t)(struct meter_plugin *plugin);
+typedef int (*plugin_parameter_func_t)(struct meter_plugin *plugin, struct plugin_parameters *parameters);
+typedef int (*plugin_collector_init_func_t)(struct meter_plugin *plugin, struct collector *collector);
 
 enum event_type;
 
 struct meter_plugin {
-    char name[PLUGIN_NAME_SIZE];
+    char name[PLUGIN_NAME_SIZE+1];
+    struct collector *collectors;
+    plugin_init_func_t init;
     plugin_start_func_t start;
+    plugin_parameter_func_t parameters;
     plugin_collector_init_func_t collector;
     plugin_stop_func_t stop;
 };
 
 typedef struct meter_plugin meter_plugin_t;
+
+void plugin_name(meter_plugin_t *plugin, const char *name);
 
 int plugin_run(meter_plugin_t *plugin);
 

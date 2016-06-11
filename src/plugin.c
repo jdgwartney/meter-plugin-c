@@ -14,51 +14,49 @@
 // limitations under the License.
 //
 
+#include <string.h>
+#include <unistd.h>
 #include "plugin.h"
+#include "example.h"
 #include "event.h"
 #include "metric.h"
 #include "measurement.h"
 #include "param.h"
-#include <unistd.h>
+
 
 #define PARAM_FIELD_HOST "host"
 #define PARAM_FIELD_PORT "port"
 #define PARAM_FIELD_SOURCE "source"
 #define PARAM_FIELD_INTERVAL "interval"
 
-static void initialize_modules(meter_plugin_t *plugin) {
-    event_initialize(plugin);
-    metric_initialize(plugin);
-    measurement_initialize(plugin);
-    parameter_initialize(plugin);
+static void plugin_initialize(struct meter_plugin *plugin) {
+
 }
 
-int plugin_run(meter_plugin_t *plugin) {
+void plugin_set_name(struct meter_plugin *plugin, const char *name) {
+    strcpy(plugin->name, name);
+}
 
-    initialize_modules(plugin);
+int plugin_run(struct meter_plugin *plugin) {
+
+    plugin_initialize(plugin);
 
     if (plugin->start) {
         plugin->start(plugin);
     }
 
-
     plugin_parameters_t *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);
     if (parameters == NULL) {
         exit(1);
     }
-    param_string_t host = parameter_get_string(parameters->items[0], PARAM_FIELD_HOST);
-    fprintf(stderr, "host: %s\n", host);
-    param_integer_t port = parameter_get_integer(parameters->items[0], PARAM_FIELD_PORT);
-    fprintf(stderr, "port: %lld\n", port);
-    param_string_t source = parameter_get_string(parameters->items[0], PARAM_FIELD_SOURCE);
-    fprintf(stderr, "source: %s\n", source);
-    param_integer_t interval = parameter_get_integer(parameters->items[0], PARAM_FIELD_INTERVAL);
-    fprintf(stderr, "interval: %lld\n", interval);
+
+    collector_t * collector = collector_create("my collector",
+                                               parameters->items[0],
+                                               measurement_get_sink(STDOUT),
+                                               example_collect);
 
     while(1) {
-        MEASUREMENT m;
+        collector_collect(collector);
         sleep(1);
-        measurement_get(&m);
-        measurement_send(&m);
     }
 }

@@ -17,10 +17,6 @@
 #include <stdio.h>
 #include "event.h"
 
-void event_initialize(meter_plugin_t *plugin) {
-
-}
-
 static const char * event_type_strings[] = {
     "info",
     "warn",

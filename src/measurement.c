@@ -13,29 +13,59 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include <math.h>
+
+#include <assert.h>
 #include <stdio.h>
-#include <string.h>
 #include <time.h>
 #include "measurement.h"
 
-double rand_range(int min, int max) {
-    double rnum =rand()/(double)RAND_MAX;
-    return floor(rnum * ((max - min) + 1)) + min;
-}
-
-void measurement_initialize(meter_plugin_t *plugin) {
+void measurement_initialize(struct meter_plugin *plugin) {
     setvbuf(stdout, NULL, _IOLBF, 0);
     srand(time(NULL));
 }
 
-void measurement_get(MEASUREMENT *m) {
-    strcpy(m->metric, "EXAMPLE_COUNT");
-    m->value = rand_range(0, 99);
-    strcpy(m->source,"foo");
-    m->timestamp = time(NULL);
+static void measurement_api_sink(measurement_metric_t metric,
+                                 measurement_value_t value,
+                                 measurement_source_t source,
+                                 measurement_timestamp_t *timestamp) {
+    assert(1);
 }
 
-void measurement_send(MEASUREMENT *m) {
-    printf("%s %.3f %s %ld\n", m->metric, m->value, m->source, m->timestamp);
+
+static void measurement_rpc_sink(measurement_metric_t metric,
+                                 measurement_value_t value,
+                                 measurement_source_t source,
+                                 measurement_timestamp_t *timestamp) {
+    assert(1);
+
 }
+
+static void measurement_stdout_sink(measurement_metric_t metric,
+                                    measurement_value_t value,
+                                    measurement_source_t source,
+                                    measurement_timestamp_t *timestamp) {
+    assert(metric);
+
+    if (source && timestamp) {
+        assert(source);
+        printf("%s %.3f %s %ld\n", metric, value, source, *timestamp);
+    } else if (source) {
+        printf("%s %.3f %s\n", metric, value, source);
+    }
+}
+
+static measurement_send_func measurement_sinks[] = {
+        measurement_api_sink,
+        measurement_rpc_sink,
+        measurement_stdout_sink
+};
+
+measurement_send_func measurement_get_sink(enum measurement_sink_type type) {
+    return measurement_sinks[type];
+}
+
+
+
+
+
+

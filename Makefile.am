@@ -18,8 +18,12 @@ plugin_SOURCES= \
 src/main.c \
 src/collector.c \
 src/collector.h \
+src/common.c \
+src/common.h \
 src/event.c \
 src/event.h \
+src/example.c \
+src/example.h \
 src/metric.c \
 src/metric.h \
 src/log.c \
@@ -32,3 +36,6 @@ src/plugin.c \
 src/plugin.h
 
 AM_LDFLAGS = -lm -ljansson
+
+AM_CFLAGS = -g
+

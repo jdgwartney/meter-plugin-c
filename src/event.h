@@ -53,7 +53,6 @@ struct event {
 
 typedef struct event EVENT;
 
-void event_initialize(meter_plugin_t *plugin);
 void event_send(const char *message, event_type_t type, const char *tags);
 
 
