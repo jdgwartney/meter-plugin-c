@@ -14,9 +14,6 @@
 // limitations under the License.
 //
 #include "plugin.h"
-#include "collector.h"
-#include "common.h"
-#include "measurement.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -61,6 +58,6 @@ int example_collect(collector_t * collector) {
 }
 
 int main(int argc, char * argv[]) {
-    meter_plugin_t plugin;
-    return plugin_run(&plugin);
+    meter_plugin_t * plugin = plugin_create();
+    return plugin_run(plugin);
 }
