@@ -1,5 +1,4 @@
-#!/bin/bash
-aclocal
-autoconf
-automake --add-missing
+#!/bin/sh
+autoreconf --install
+automake --add-missing --copy
 

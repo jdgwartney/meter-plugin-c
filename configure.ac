@@ -15,16 +15,24 @@
 
 AC_PREREQ([2.64])
 AC_INIT([meter-plugin], [1.0])
-AC_CONFIG_SRCDIR([src/main.c])
-AC_PROG_CC
-AC_CHECK_LIB(m, floor)
-AC_CHECK_LIB(jansson, json_load_file)
-
-AC_PROG_INSTALL
 # Init automake, and specify this program use relaxed structures.
 # i.e. this program doesn't follow the gnu coding standards, and doesn't have
 # ChangeLog, COPYING, AUTHORS, INSTALL, README etc. files.
 # AM_INIT_AUTOMAKE([-Wall -Werror foreign])
-AM_INIT_AUTOMAKE([-Wall -Werror subdir-objects])
-AC_CONFIG_FILES([Makefile])
+AM_INIT_AUTOMAKE([ -Wall -Werror subdir-objects])
+LT_PREREQ([2.2])
+LT_INIT([dlopen])
+
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_HEADERS(config.h[])
+AC_PROG_CC
+AM_PROG_AR
+AC_CHECK_LIB(m, floor)
+AC_CHECK_LIB(jansson, json_load_file)
+AC_CHECK_HEADERS([stdlib.h])
+
+AC_PROG_INSTALL
+AC_CONFIG_FILES([Makefile
+		 lib/Makefile
+		 src/Makefile])
 AC_OUTPUT
