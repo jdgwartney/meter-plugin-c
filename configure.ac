@@ -35,5 +35,7 @@ AC_CHECK_HEADERS([stdlib.h])
 AC_PROG_INSTALL
 AC_CONFIG_FILES([Makefile
 		 lib/Makefile
-		 src/Makefile])
+		 include/Makefile
+		 examples/Makefile
+		 examples/random/Makefile])
 AC_OUTPUT
