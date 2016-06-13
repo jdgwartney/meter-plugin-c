@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#include "example.h"
+#include "plugin.h"
 #include "collector.h"
 #include "common.h"
 #include "measurement.h"
@@ -21,6 +21,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
+#define PARAM_FIELD_HOST "host"
+#define PARAM_FIELD_PORT "port"
+#define PARAM_FIELD_SOURCE "source"
+#define PARAM_FIELD_INTERVAL "interval"
+
+int example_parameters(meter_plugin_t *plugin, struct plugin_parameters *parameters);
+int example_start(meter_plugin_t *plugin);
+int example_collect(collector_t *collector);
 
 int example_start(meter_plugin_t *plugin) {
     fprintf(stderr, "example_start()\n");
@@ -49,4 +58,9 @@ int example_collect(collector_t * collector) {
     measurement_source_t source = "foo";
     collector->send_measurement(metric, value, source, &timestamp);
     return 0;
+}
+
+int main(int argc, char * argv[]) {
+    meter_plugin_t plugin;
+    return plugin_run(&plugin);
 }

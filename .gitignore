@@ -7,7 +7,7 @@ ar-lib
 autom4te.cache/
 compile
 depcomp
-lib/.libs/
+.libs
 libtool
 ltmain.sh
 missing
