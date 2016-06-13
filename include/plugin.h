@@ -18,7 +18,11 @@
 #define METER_PLUGIN_PLUGIN_H
 
 #include "collector.h"
+#include "common.h"
+#include "event.h"
 #include "param.h"
+#include "measurement.h"
+#include "metric.h"
 
 #define PLUGIN_NAME_SIZE 32
 
@@ -56,8 +60,12 @@ struct meter_plugin {
 
 typedef struct meter_plugin meter_plugin_t;
 
+meter_plugin_t * plugin_create();
+
 void plugin_name(meter_plugin_t *plugin, const char *name);
 
 int plugin_run(meter_plugin_t *plugin);
+
+
 
 #endif //METER_PLUGIN_PLUGIN_H
