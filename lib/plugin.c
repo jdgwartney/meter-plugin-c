@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+#include "assert.h"
 #include <string.h>
 #include <unistd.h>
 #include "common.h"
@@ -47,9 +48,11 @@ static void plugin_initialize(struct meter_plugin *plugin) {
     plugin->stop = NULL;
 }
 
-meter_plugin_t *plugin_create() {
+meter_plugin_t * plugin_create() {
     meter_plugin_t *plugin = malloc(sizeof(meter_plugin_t));
+    assert(plugin);
     plugin_initialize(plugin);
+    return plugin;
 }
 
 void plugin_set_name(meter_plugin_t *plugin, const char *name) {
