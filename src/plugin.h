@@ -24,17 +24,29 @@
 
 struct meter_plugin;
 
+enum plugin_handler_type {
+    INITIALIZE,
+    PARAMETERS,
+    START,
+    COLLECTOR_INIT,
+    STOP
+};
+
+typedef enum plugin_handler_type plugin_handler_type_t;
+
+
 typedef int (*plugin_init_func_t)(struct meter_plugin *plugin);
 typedef int (*plugin_start_func_t)(struct meter_plugin *plugin);
 typedef int (*plugin_stop_func_t)(struct meter_plugin *plugin);
 typedef int (*plugin_parameter_func_t)(struct meter_plugin *plugin, struct plugin_parameters *parameters);
 typedef int (*plugin_collector_init_func_t)(struct meter_plugin *plugin, struct collector *collector);
 
-enum event_type;
+typedef int (*plugin_handler_func_t)(struct meter_plugin *plugin);
 
 struct meter_plugin {
     char name[PLUGIN_NAME_SIZE+1];
-    struct collector *collectors;
+    collector_ptr_t * collectors;
+    int num_collectors;
     plugin_init_func_t init;
     plugin_start_func_t start;
     plugin_parameter_func_t parameters;

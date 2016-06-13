@@ -35,6 +35,7 @@ struct collector {
 };
 
 typedef struct collector collector_t;
+typedef collector_t * collector_ptr_t;
 
 //
 // Private API
