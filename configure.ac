@@ -20,13 +20,14 @@ AC_INIT([meter-plugin], [1.0])
 # ChangeLog, COPYING, AUTHORS, INSTALL, README etc. files.
 # AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_INIT_AUTOMAKE([ -Wall -Werror subdir-objects])
+AM_PROG_AR
 LT_PREREQ([2.2])
 LT_INIT([dlopen])
 
+AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_HEADERS(config.h[])
 AC_PROG_CC
-AM_PROG_AR
 AC_CHECK_LIB(m, floor)
 AC_CHECK_LIB(jansson, json_load_file)
 AC_CHECK_HEADERS([stdlib.h])

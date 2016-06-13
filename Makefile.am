@@ -1,1 +1,1 @@
-SUBDIRS = lib include src
+SUBDIRS = lib src

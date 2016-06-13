@@ -13,29 +13,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-bin_PROGRAMS=plugin
-plugin_SOURCES= \
-src/main.c \
-src/collector.c \
-src/collector.h \
-src/common.c \
-src/common.h \
-src/event.c \
-src/event.h \
-src/example.c \
-src/example.h \
-src/metric.c \
-src/metric.h \
-src/log.c \
-src/log.h \
-src/measurement.c \
-src/measurement.h \
-src/param.c \
-src/param.h \
-src/plugin.c \
-src/plugin.h
-
+bin_PROGRAMS =plugin
+plugin_SOURCES = main.c 
+plugin_CCFLAGS = -I$(top_srcdir)/include
+plugin_LDADD = ../lib/libmeterplugin.la
 AM_LDFLAGS = -lm -ljansson
-
 AM_CFLAGS = -g
 
