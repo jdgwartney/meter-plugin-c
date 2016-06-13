@@ -16,8 +16,6 @@
 #ifndef METER_PLUGIN_METRIC_H
 #define METER_PLUGIN_METRIC_H
 
-#include "plugin.h"
-
-void metric_initialize(meter_plugin_t *plugin);
+void metric_initialize();
 
 #endif //METER_PLUGIN_METRIC_H
