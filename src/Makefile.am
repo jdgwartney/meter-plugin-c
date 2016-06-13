@@ -13,7 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-bin_PROGRAMS =plugin
+bin_PROGRAMS = plugin
 plugin_SOURCES = main.c 
 plugin_CCFLAGS = -I$(top_srcdir)/include
 plugin_LDADD = ../lib/libmeterplugin.la
