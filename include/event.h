@@ -18,8 +18,6 @@
 
 #include <time.h>
 
-#include "plugin.h"
-
 // ToDo capability to override or make dynamic
 
 #define EVENT_MESSAGE_SIZE 255
