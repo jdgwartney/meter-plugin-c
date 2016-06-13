@@ -14,11 +14,9 @@
 // limitations under the License.
 //
 
-#include "example.h"
+#include "plugin.h"
 
 int main(int argc, char * argv[]) {
     meter_plugin_t plugin;
-    plugin.start = example_start;
-    plugin.parameters = example_parameters;
     return plugin_run(&plugin);
 }
