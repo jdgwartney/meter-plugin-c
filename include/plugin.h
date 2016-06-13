@@ -49,8 +49,10 @@ typedef int (*plugin_handler_func_t)(struct meter_plugin *plugin);
 
 struct meter_plugin {
     char name[PLUGIN_NAME_SIZE+1];
+
     collector_ptr_t * collectors;
     int num_collectors;
+
     plugin_init_func_t init;
     plugin_start_func_t start;
     plugin_parameter_func_t parameters;
