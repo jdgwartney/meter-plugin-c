@@ -1,3 +1,24 @@
+# ide
+*.in
+.idea
+# autoconf tools
+aclocal.m4
+ar-lib
+autom4te.cache/
+compile
+depcomp
+lib/.libs/
+libtool
+ltmain.sh
+missing
+stamp-h1
+Makefile
+config*
+configure
+.deps
+install-sh
+m4
+lib/.deps
 # Object files
 *.o
 *.ko
