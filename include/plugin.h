@@ -44,16 +44,14 @@ typedef int (*plugin_init_func_t)(struct meter_plugin *plugin);
 typedef int (*plugin_start_func_t)(struct meter_plugin *plugin);
 typedef int (*plugin_stop_func_t)(struct meter_plugin *plugin);
 
-typedef int (*plugin_parameter_func_t)(struct meter_plugin *plugin, struct plugin_parameters *parameters);
+typedef int (*plugin_parameter_func_t)(struct meter_plugin *plugin);
 
-typedef int (*plugin_collect_init_func_t)(struct meter_plugin *plugin, struct collector *collector);
-typedef int (*plugin_collect_start_func_t)(struct meter_plugin *plugin, struct collector *collector);
-typedef int (*plugin_collect_func_t)(struct collector *collector);
-
-typedef int (*plugin_handler_func_t)(struct meter_plugin *plugin);
+typedef int (*plugin_collector_init_func_t)(struct meter_plugin *plugin, struct collector *collector);
 
 struct meter_plugin {
     char name[PLUGIN_NAME_SIZE+1];
+
+    plugin_parameters_t *parameters;
 
     collector_ptr_t * collectors;
     int num_collectors;
@@ -66,17 +64,12 @@ struct meter_plugin {
 
     plugin_parameter_func_t param;
 
-    plugin_collect_init_func_t collect_init;
-
-    plugin_collect_start_func_t collect_start;
-    plugin_collect_func_t collect;
+    plugin_collector_init_func_t collector_init;
 };
 
 typedef struct meter_plugin meter_plugin_t;
 
 meter_plugin_t * plugin_create();
-
-void plugin_name(meter_plugin_t *plugin, const char *name);
 
 int plugin_run(meter_plugin_t *plugin);
 

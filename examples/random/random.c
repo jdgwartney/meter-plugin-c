@@ -19,56 +19,120 @@
 #include <string.h>
 #include <time.h>
 
-#define PARAM_FIELD_MAX "min"
-#define PARAM_FIELD_MIN "max"
-#define PARAM_FIELD_SOURCE "source"
-#define PARAM_FIELD_INTERVAL "interval"
+#define METRIC_NAME "EXAMPLE_RANDOM"
 
-struct random_plugin {
+#define RANDOM_PARAM_MAX "min"
+#define RANDOM_PARAM_MIN "max"
+#define RANDOM_PARAM_SOURCE "source"
+#define RANDOM_PARAM_INTERVAL "interval"
+
+#define RANDOM_FUNCTION_NAME(NAME) fprintf(stderr, "%s: line: %d, %s\n",(NAME), __LINE__, __PRETTY_FUNCTION__);
+
+// Specific data for the Random Plugin
+struct random_plugin_data {
     measurement_metric_t metric;
 };
 
-int random_start(meter_plugin_t *plugin) {
-    fprintf(stderr, "example_start()\n");
+// Collector specific data for Random Collector
+struct random_collector_data {
+    measurement_metric_t metric;
+    int min;
+    int max;
+    int interval;
+};
+
+/** \brief Random plugin initialization method
+ *
+ */
+int random_plugin_init(meter_plugin_t *plugin) {
+    RANDOM_FUNCTION_NAME(plugin->name)
+    strcpy(plugin->name, "random");
     return 0;
 }
 
-int random_param(meter_plugin_t *plugin, struct plugin_parameters *parameters) {
-    fprintf(stderr, "example_parameters()\n");
+int random_plugin_start(meter_plugin_t *plugin) {
+    RANDOM_FUNCTION_NAME(plugin->name)
+    return 0;
+}
+
+/** \brief Random plugin collector start method
+ *
+ */
+int random_plugin_param(meter_plugin_t *plugin) {
+    RANDOM_FUNCTION_NAME(plugin->name)
+    plugin_parameters_t *parameters = plugin->parameters;
+
     size_t size = parameters->size;
     for (int i = 0 ; i < size ; i++) {
-        param_integer_t host = parameter_get_integer(parameters->items[i], PARAM_FIELD_MIN);
-        fprintf(stderr, "min: %lld\n", host);
-        param_integer_t port = parameter_get_integer(parameters->items[i], PARAM_FIELD_MAX);
-        fprintf(stderr, "max: %lld\n", port);
-        param_string_t source = parameter_get_string(parameters->items[i], PARAM_FIELD_SOURCE);
-        fprintf(stderr, "source: %s\n", source);
-        param_integer_t interval = parameter_get_integer(parameters->items[i], PARAM_FIELD_INTERVAL);
+        param_integer_t host = parameter_get_integer(parameters->items[i], RANDOM_PARAM_MIN);
+        fprintf(stderr, "min: %lld, ", host);
+        param_integer_t port = parameter_get_integer(parameters->items[i], RANDOM_PARAM_MAX);
+        fprintf(stderr, "max: %lld, ", port);
+        param_string_t source = parameter_get_string(parameters->items[i], RANDOM_PARAM_SOURCE);
+        fprintf(stderr, "source: %s, ", source);
+        param_integer_t interval = parameter_get_integer(parameters->items[i], RANDOM_PARAM_INTERVAL);
         fprintf(stderr, "interval: %lld\n", interval);
     }
 
     return 0;
 }
 
-int random_collect(collector_t * collector) {
+/** \brief Random plugin collector start method
+ *
+ */
+int random_collector_init(meter_plugin_t *plugin) {
+    RANDOM_FUNCTION_NAME(plugin->name)
+    return 0;
+}
+
+/** \brief Random plugin collector start method
+ *
+ */
+int random_collector_start(meter_plugin_t *plugin) {
+    RANDOM_FUNCTION_NAME(plugin->name)
+    return 0;
+}
+
+/** \brief This function collects measurements, in this specific case random numbers
+ *
+ */
+int random_collector_collect(collector_t * collector) {
+    RANDOM_FUNCTION_NAME(collector->name)
     measurement_timestamp_t timestamp = time(NULL);
     measurement_metric_t metric;
-    fprintf(stderr, "collector: %s\n", collector->name);
-    strcpy(metric, "EXAMPLE_COUNT");
+    strcpy(metric, METRIC_NAME);
     measurement_value_t value = rand_range(0, 99);
     measurement_source_t source = "foo";
     collector->send_measurement(metric, value, source, &timestamp);
     return 0;
 }
 
-int random_collect_init(meter_plugin_t *plugin, collector_t *collector) {
-    fprintf(stderr, "collector name: %s\n", collector->name);
+/** \brief Called to initialize each of the collectors
+ *
+ */
+int random_plugin_collector_init(meter_plugin_t *plugin, collector_t *collector) {
+    RANDOM_FUNCTION_NAME(plugin->name)
+    collector->init = random_collector_init;
+    collector->start = random_collector_start;
+    collector->collect = random_collector_collect;
 }
 
+/** \brief Plugin main() entry point
+ *
+ */
 int main(int argc, char * argv[]) {
+    // Create an instance of a plugin
     meter_plugin_t * plugin = plugin_create();
-    plugin->collect = random_collect;
-    plugin->collect_init = random_collect_init;
-    plugin->param = random_param;
+
+    // Assign function pointers that get called by the framework
+    //    init - Initial function called when plugin_run() is called with the meter plugin instance
+    //    param - Called after the plugin parameters are read
+    //    collector_init - Called to initialize the collectors from the plugin parameter items
+    //    start - Called just before starting the collectors
+    plugin->init = random_plugin_init;
+    plugin->param = random_plugin_param;
+    plugin->collector_init = random_plugin_collector_init;
+    plugin->start = random_plugin_start;
+
     return plugin_run(plugin);
 }

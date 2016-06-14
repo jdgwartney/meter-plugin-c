@@ -56,7 +56,6 @@ typedef void (*measurement_send_func)(measurement_metric_t metric,
 
 
 // Private API
-void measurement_initialize(struct meter_plugin *plugin);
 
 // Public API
 measurement_send_func measurement_get_sink(enum measurement_sink_type type);

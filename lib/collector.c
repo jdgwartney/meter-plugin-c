@@ -17,24 +17,43 @@
 #include <string.h>
 #include "collector.h"
 
-void collector_collect(collector_t *collector) {
+/** \brief Calls our collectors init method
+ *
+ */
+void collector_init(collector_t *collector) {
+    if (collector->init) {
+        collector->init(collector);
+    }
+}
 
-    collector->collect(collector);
+/** \brief Calls our collectors start method
+ *
+ */
+void collector_start(collector_t *collector) {
+    if (collector->start) {
+        collector->start(collector);
+    }
+}
+
+/** \brief Calls our collectors collect method
+ *
+ */
+void collector_collect(collector_t *collector) {
+    if (collector->collect) {
+        collector->collect(collector);
+    }
 }
 
 
 /**
  * /brief Create a collector object
  */
-collector_t *collector_create(const char * name,
-                              parameter_item_t *item,
-                              measurement_send_func send,
-                              collector_collect_func collect) {
+collector_t *collector_create(parameter_item_t *item) {
     collector_t *collector = malloc(sizeof(collector_t));
     assert(collector);
-    strcpy(collector->name, name);
+    memset(collector,'\0', sizeof(collector_t));
     collector->item = item;
-    collector->collect = collect;
-    collector->send_measurement = send;
+    // Default the sink to standard out, specific plugins can override in the collector init method
+    collector->send_measurement = measurement_get_sink(STDOUT);
     return collector;
 }

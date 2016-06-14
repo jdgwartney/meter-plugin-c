@@ -1,8 +1,8 @@
 {
-  "EXAMPLE_COUNT": {
-    "description": "A metric used to track counts of something",
-    "displayName": "Example Count",
-    "displayNameShort": "Ex. Cnt.",
+  "EXAMPLE_RANDOM": {
+    "description": "A metric with random measurements",
+    "displayName": "Example Random",
+    "displayNameShort": "Ex. Random",
     "unit": "number",
     "defaultAggregate": "avg"
   }

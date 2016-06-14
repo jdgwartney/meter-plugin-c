@@ -23,8 +23,9 @@
 
 struct collector;
 
-typedef int (*collector_collect_func)(struct collector *collector);
+typedef int (*collector_init_func)(struct collector *collector);
 typedef int (*collector_start_func)(struct collector *collector);
+typedef int (*collector_collect_func)(struct collector *collector);
 
 struct collector {
     char name[COLLECTOR_NAME_SIZE];
@@ -33,8 +34,10 @@ struct collector {
     void * data;
 
     measurement_send_func send_measurement;
-    collector_collect_func collect;
+
+    collector_init_func init;
     collector_start_func start;
+    collector_collect_func collect;
 };
 
 typedef struct collector collector_t;
@@ -44,18 +47,14 @@ typedef collector_t * collector_ptr_t;
 // Private API
 //
 
-void collector_collect(collector_t *collector);
+void collector_init(collector_t *collector);
 void collector_start(collector_t *collector);
+void collector_collect(collector_t *collector);
 
 //
 // Public API
 //
 
-void collector_set_data(collector_t *collector, void * data);
-
-collector_t * collector_create(const char * name,
-                               parameter_item_t *item,
-                               measurement_send_func send,
-                               collector_collect_func collect);
+collector_t * collector_create(parameter_item_t *item);
 
 #endif //METER_PLUGIN_COLLECTOR_H

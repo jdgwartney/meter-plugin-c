@@ -1,53 +1,53 @@
 {
-   "name": "Example Meter Plugin in C",
+   "name": "Random Meter Plugin in C",
    "version": "1.0.0",
    "meterVersionRequired": "4.2.0-611",
    "unsupportedPlatforms": [],
    "tags" : ["example", "c", "udp"],
-   "description": "Example plugin that shows how to write a meter plugin in C to extract data from a UDP listening port",
+   "description": "Example plugin that shows how to write a meter plugin in C by generating random numbers",
    "icon": "icon.png",
    "command": "./plugin",
    "postExtract": "",
    "metrics": [
-       "EXAMPLE_COUNT"
+       "EXAMPLE_RANDOM"
     ],
    "dashboards": [
       {
-        "name": "Example Count",
-        "layout": "d-w=1&d-h=1&d-pad=5&d-light=0&d-bg=none&d-g-EXAMPLE_COUNT=0-0-1-1"
+        "name": "Example Random",
+        "layout": "d-w=1&d-h=1&d-pad=5&d-light=0&d-bg=none&d-g-EXAMPLE_RANDOM=0-0-1-1"
       }
     ],
    "paramSchema": [
      {
-       "title": "Host",
-       "name": "host",
-       "description": "Host to contact to get count",
-       "type": "string",
-       "default": "localhost",
+       "title": "Min",
+       "name": "min",
+       "description": "Minimum number to generate",
+       "type": "int",
+       "default": 0
        "required": true
      },
      {
-       "title": "Port",
-       "name": "port",
-       "description": "Port on host to contact to get count",
+       "title": "Max",
+       "name": "max",
+       "description": "Maximum number to generate",
        "type": "int",
-       "default": 8012,
+       "default": 99,
        "required": true
      },
      {
        "title": "Source",
        "name": "source",
-       "description": "Source to use for measurements",
+       "description": "Source to use for random values for measurements",
        "type": "string",
-       "default": "Example",
+       "default": "Random",
        "required": true
      },
      {
        "title": "Interval",
        "name": "interval",
-       "description": "How often to send measurement in seconds",
+       "description": "How often to send random measurement values in seconds",
        "type": "int",
-       "default": "5",
+       "default": 5,
        "required": true
      }
    ]
