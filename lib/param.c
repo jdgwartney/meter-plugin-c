@@ -27,7 +27,6 @@ void parameter_initialize(struct meter_plugin *plugin) {
 }
 
 static void print_json_type(FILE *file, int json_type) {
-    plugin_parameters_t *p = malloc(sizeof(plugin_parameters_t));
 
     switch(json_type) {
         case JSON_OBJECT:
@@ -74,10 +73,10 @@ plugin_parameters_t * parameter_load(const char *path) {
     if(json) {
         json_t * items = json_object_get(json, PARAM_FIELD_ITEMS);
         items = json_incref(items);
-        size_t count = json_array_size(items);
+        size_t size = json_array_size(items);
 
-        p->count = count;
-        p->items = malloc(sizeof(parameter_item_ptr_t) * count);
+        p->size = size;
+        p->items = malloc(sizeof(parameter_item_ptr_t) * size);
         assert(p->items);
 
         size_t index;
@@ -89,6 +88,8 @@ plugin_parameters_t * parameter_load(const char *path) {
     }
     else {
         print_json_error(stderr, error);
+        free(p);
+        p = NULL;
     }
     return p;
 }

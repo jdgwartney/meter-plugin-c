@@ -38,17 +38,18 @@ int plugin_collect(collector_t *collector) {
  *
  */
 static void plugin_initialize(struct meter_plugin *plugin) {
-    plugin->name[0] = '\0';
+    plugin->collect_init = NULL;
+    plugin->collect = NULL;
     plugin->collectors = NULL;
+    plugin->name[0] = '\0';
     plugin->num_collectors = 0;
     plugin->init = NULL;
     plugin->start = NULL;
-    plugin->parameters = NULL;
-    plugin->collector = NULL;
+    plugin->param = NULL;
     plugin->stop = NULL;
 }
 
-meter_plugin_t * plugin_create() {
+meter_plugin_t *plugin_create() {
     meter_plugin_t *plugin = malloc(sizeof(meter_plugin_t));
     assert(plugin);
     plugin_initialize(plugin);
@@ -63,38 +64,57 @@ void plugin_set_handler() {
 
 }
 
-void plugin_create_collectors(meter_plugin_t *plugin, plugin_parameters_t *parameters) {
-    size_t count = parameters->count;
-    plugin->collectors = malloc(sizeof(collector_t * ) * count);
+void plugin_create_collectors(meter_plugin_t * plugin, plugin_parameters_t *parameters) {
 
-    for (int i = 0; i < count; i++) {
+    size_t size = parameters->size;
+    plugin->collectors = malloc(sizeof(collector_ptr_t) * size);
+    assert(plugin->collectors != NULL);
+
+    for (int i = 0; i < size; i++) {
         parameter_item_t *items = parameters->items[i];
         char name[COLLECTOR_NAME_SIZE];
-        sprintf(name, "%s - %d", "collector - ", i);
+        sprintf(name, "collector #%d", i);
         collector_t *collector = collector_create(name,
                                                   items,
                                                   measurement_get_sink(STDOUT),
-                                                  plugin_collect);
+                                                  plugin->collect);
+        if (plugin->collect_init) {
+            plugin->collect_init(plugin, collector);
+        }
         plugin->collectors[i] = collector;
     }
 }
 
 int plugin_run(struct meter_plugin *plugin) {
 
-    plugin_initialize(plugin);
+    // If we do not have a method to collect then there is not much to do
+    // so assert on the function pointer being NULL
+    assert(plugin->collect != NULL);
 
+    // If an initialization method has been registered call it
+    if (plugin->init) {
+        plugin->init(plugin);
+    }
+
+    // If an start method has been registered call it
     if (plugin->start) {
         plugin->start(plugin);
     }
 
+    // Load the plugin configuration from "param.json"
     plugin_parameters_t *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);
-    if (parameters == NULL) {
-        exit(1);
+    assert(parameters != NULL);
+    plugin->num_collectors = parameters->size;
+
+    // If an param method has been registered call it
+    if (plugin->param) {
+        plugin->param(plugin, parameters);
     }
 
+    // Create a collector for each of plugin parameter "items"
     plugin_create_collectors(plugin, parameters);
 
-    int count = parameters->count;
+    int count = plugin->num_collectors;
     while (1) {
         for (int i = 0; i < count; i++) {
             collector_t *collector = plugin->collectors[i];
