@@ -19,3 +19,5 @@ random_SOURCES = random.c
 random_LDADD = ../../lib/libmeterplugin.la
 AM_LDFLAGS = -lm -ljansson
 
+run:
+	./random
