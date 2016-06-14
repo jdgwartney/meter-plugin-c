@@ -15,11 +15,12 @@
 //
 #include "plugin.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 
-#define METRIC_NAME "EXAMPLE_RANDOM"
+#define RANDOM_METRIC_NAME "EXAMPLE_RANDOM"
 
 #define RANDOM_PARAM_MAX "min"
 #define RANDOM_PARAM_MIN "max"
@@ -35,11 +36,14 @@ struct random_plugin_data {
 
 // Collector specific data for Random Collector
 struct random_collector_data {
-    measurement_metric_t metric;
     int min;
     int max;
     int interval;
+    measurement_metric_t metric;
+    measurement_source_t source;
 };
+
+typedef struct random_collector_data random_collector_data_t;
 
 /** \brief Random plugin initialization method
  *
@@ -80,16 +84,16 @@ int random_plugin_param(meter_plugin_t *plugin) {
 /** \brief Random plugin collector start method
  *
  */
-int random_collector_init(meter_plugin_t *plugin) {
-    RANDOM_FUNCTION_NAME(plugin->name)
+int random_collector_init(collector_t *collector) {
+    RANDOM_FUNCTION_NAME(collector->name)
     return 0;
 }
 
 /** \brief Random plugin collector start method
  *
  */
-int random_collector_start(meter_plugin_t *plugin) {
-    RANDOM_FUNCTION_NAME(plugin->name)
+int random_collector_start(collector_t *collector) {
+    RANDOM_FUNCTION_NAME(collector->name)
     return 0;
 }
 
@@ -98,12 +102,11 @@ int random_collector_start(meter_plugin_t *plugin) {
  */
 int random_collector_collect(collector_t * collector) {
     RANDOM_FUNCTION_NAME(collector->name)
+    random_collector_data_t *data = collector->data;
+    assert(data && "Collector data is NULL");
     measurement_timestamp_t timestamp = time(NULL);
-    measurement_metric_t metric;
-    strcpy(metric, METRIC_NAME);
-    measurement_value_t value = rand_range(0, 99);
-    measurement_source_t source = "foo";
-    collector->send_measurement(metric, value, source, &timestamp);
+    measurement_value_t value = rand_range(data->min, data->max);
+    collector->send_measurement(data->metric, value, data->source, &timestamp);
     return 0;
 }
 
@@ -112,9 +115,33 @@ int random_collector_collect(collector_t * collector) {
  */
 int random_plugin_collector_init(meter_plugin_t *plugin, collector_t *collector) {
     RANDOM_FUNCTION_NAME(plugin->name)
+    random_collector_data_t * data = malloc(sizeof(random_collector_data_t));
+    assert(data);
+    memset(data, '\0', sizeof(random_collector_data_t));
+
+    parameter_item_t *item = collector->item;
+
+    // Get the parameters for this collector
+    data->min = parameter_get_integer(item, RANDOM_PARAM_MIN);
+    data->max = parameter_get_integer(item, RANDOM_PARAM_MAX);
+    data->interval = parameter_get_integer(item, RANDOM_PARAM_INTERVAL);
+    const char * source = parameter_get_string(item, RANDOM_PARAM_SOURCE);
+
+    strcpy(data->metric, RANDOM_METRIC_NAME);
+    strcpy(data->source, source);
+
+    // Assign the random collector data to the collector
+    collector->data = data;
+
+    // Use the source for the name of the collector
+    strcpy(collector->name, source);
+
+    // Assign our collector functions
     collector->init = random_collector_init;
     collector->start = random_collector_start;
     collector->collect = random_collector_collect;
+
+    return 0;
 }
 
 /** \brief Plugin main() entry point
