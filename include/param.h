@@ -34,7 +34,7 @@ typedef json_t parameter_item_t;
 typedef parameter_item_t * parameter_item_ptr_t;
 
 struct plugin_parameters {
-    size_t count;
+    size_t size;
     parameter_item_ptr_t *items;
 };
 

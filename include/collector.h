@@ -29,6 +29,9 @@ typedef int (*collector_start_func)(struct collector *collector);
 struct collector {
     char name[COLLECTOR_NAME_SIZE];
     parameter_item_t * item;
+
+    void * data;
+
     measurement_send_func send_measurement;
     collector_collect_func collect;
     collector_start_func start;
@@ -48,10 +51,11 @@ void collector_start(collector_t *collector);
 // Public API
 //
 
+void collector_set_data(collector_t *collector, void * data);
+
 collector_t * collector_create(const char * name,
                                parameter_item_t *item,
                                measurement_send_func send,
                                collector_collect_func collect);
-
 
 #endif //METER_PLUGIN_COLLECTOR_H
