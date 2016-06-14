@@ -76,7 +76,6 @@ int plugin_COLLECTORS_CREATE(meter_plugin_t *plugin) {
 
     assert(plugin);
     assert(plugin->parameters);
-    fprintf(stderr,"size: %zu\n", plugin->parameters->size);
 
     size_t size = plugin->parameters->size;
     collector_ptr_t *collectors = malloc(sizeof(collector_ptr_t) * size);
@@ -90,9 +89,8 @@ int plugin_COLLECTORS_CREATE(meter_plugin_t *plugin) {
         collectors[i] = collector;
     }
 
-    plugin->collectors = collectors;
-    plugin->num_collectors = size;
-    fprintf(stderr,"size: %zu\n", plugin->num_collectors);
+    plugin->collectors.list = collectors;
+    plugin->collectors.size = size;
 
     return result;
 }
@@ -105,9 +103,8 @@ plugin_result_t plugin_COLLECTORS_INITIALIZE(meter_plugin_t *plugin) {
 
     assert(plugin);
 
-    size_t size = plugin->num_collectors;
-    collector_ptr_t *collectors = plugin->collectors;
-    fprintf(stderr, "%zu\n", size);
+    size_t size = plugin->collectors.size;
+    collector_ptr_t *collectors = plugin->collectors.list;
 
     for (size_t i = 0; i < size; i++) {
         collector_t *collector = collectors[i];
@@ -127,8 +124,8 @@ plugin_result_t plugin_COLLECTORS_START(meter_plugin_t *plugin) {
 
     assert(plugin);
 
-    size_t size = plugin->num_collectors;
-    collector_ptr_t *collectors = plugin->collectors;
+    size_t size = plugin->collectors.size;
+    collector_ptr_t *collectors = plugin->collectors.list;
 
     for (size_t i = 0; i < size; i++) {
         collector_t *collector = collectors[i];
@@ -149,7 +146,6 @@ plugin_result_t plugin_PARAMETERS_LOAD(meter_plugin_t *plugin) {
     plugin_parameters_t *parameters = parameter_load(PARAMETERS_DEFAULT_PATH);
     if (parameters) {
         plugin->parameters = parameters;
-        plugin->num_collectors = parameters->size;
     }
     else {
         fprintf(stderr, "Unable to load plugin parameters\n");
@@ -181,13 +177,13 @@ plugin_result_t plugin_PARAMETERS_LOADED(meter_plugin_t *plugin) {
 plugin_result_t plugin_RUN(meter_plugin_t *plugin) {
     plugin_result_t result = PLUGIN_SUCCEED;
 
-    size_t count = plugin->num_collectors;
+    size_t size = plugin->collectors.size;
     int collect_measurements = 1;
 
     while (collect_measurements) {
         // Loop through the collectors and call eaches respective collection method
-        for (int i = 0; i < count; i++) {
-            collector_t *collector = plugin->collectors[i];
+        for (int i = 0; i < size; i++) {
+            collector_t *collector = plugin->collectors.list[i];
             if (collector_collect(collector) == PLUGIN_FAIL) {
                 collect_measurements = 0;
                 break;

@@ -39,8 +39,7 @@ struct meter_plugin {
 
     plugin_parameters_t *parameters;
 
-    collector_ptr_t * collectors;
-    size_t num_collectors;
+    collector_list_t collectors;
 
     void * user_data;
 

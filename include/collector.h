@@ -44,6 +44,13 @@ struct collector {
 typedef struct collector collector_t;
 typedef collector_t * collector_ptr_t;
 
+struct collector_list {
+    collector_ptr_t *list;
+    size_t size;
+};
+
+typedef struct collector_list collector_list_t;
+
 //
 // Private API
 //
