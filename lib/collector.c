@@ -21,6 +21,7 @@
  *
  */
 void collector_init(collector_t *collector) {
+    assert(collector);
     if (collector->init) {
         collector->init(collector);
     }
@@ -30,6 +31,7 @@ void collector_init(collector_t *collector) {
  *
  */
 void collector_start(collector_t *collector) {
+    assert(collector);
     if (collector->start) {
         collector->start(collector);
     }
@@ -39,6 +41,7 @@ void collector_start(collector_t *collector) {
  *
  */
 void collector_collect(collector_t *collector) {
+    assert(collector);
     if (collector->collect) {
         collector->collect(collector);
     }
