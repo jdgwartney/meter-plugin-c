@@ -23,7 +23,7 @@ struct meter_plugin;
 
 #define PARAMETER_MAX_STRING 128
 
-#define DEFAULT_PARAMETERS_PATH "./param.json"
+#define PARAMETERS_DEFAULT_PATH "./param.json"
 
 typedef char param_boolean_t;
 typedef long long param_integer_t;

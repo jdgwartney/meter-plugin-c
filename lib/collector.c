@@ -20,31 +20,45 @@
 /** \brief Calls our collectors init method
  *
  */
-void collector_init(collector_t *collector) {
+plugin_result_t collector_initialize(collector_t *collector) {
+    plugin_result_t result = PLUGIN_SUCCEED;
     assert(collector);
-    if (collector->init) {
-        collector->init(collector);
+    if (collector->initialize_cb && collector->initialize_cb(collector) == PLUGIN_FAIL) {
+        fprintf(stderr, "Collector initialize function failed!\n");
+        result = PLUGIN_FAIL;
     }
+    return result;
 }
 
 /** \brief Calls our collectors start method
  *
  */
-void collector_start(collector_t *collector) {
+plugin_result_t collector_start(collector_t *collector) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
     assert(collector);
-    if (collector->start) {
-        collector->start(collector);
+
+    if (collector->start_cb && collector->start_cb(collector) == PLUGIN_FAIL) {
+        fprintf(stderr, "Collector start function failed!\n");
+        result = PLUGIN_FAIL;
     }
+    return result;
 }
 
 /** \brief Calls our collectors collect method
  *
  */
-void collector_collect(collector_t *collector) {
+plugin_result_t collector_collect(collector_t *collector) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
     assert(collector);
-    if (collector->collect) {
-        collector->collect(collector);
+    fprintf(stderr, "collect_cb %p\n", collector->collect_cb);
+
+    if (collector->collect_cb && collector->collect_cb(collector) == PLUGIN_FAIL) {
+        fprintf(stderr, "Collector collect function failed!\n");
+        result = PLUGIN_FAIL;
     }
+    return result;
 }
 
 
@@ -54,9 +68,13 @@ void collector_collect(collector_t *collector) {
 collector_t *collector_create(parameter_item_t *item) {
     collector_t *collector = malloc(sizeof(collector_t));
     assert(collector);
+
+    // Initialize the memory associated with the structure
     memset(collector,'\0', sizeof(collector_t));
     collector->item = item;
+
     // Default the sink to standard out, specific plugins can override in the collector init method
     collector->send_measurement = measurement_get_sink(STDOUT);
+
     return collector;
 }

@@ -18,14 +18,15 @@
 
 #include "measurement.h"
 #include "param.h"
+#include "common.h"
 
 #define COLLECTOR_NAME_SIZE 32
 
 struct collector;
 
-typedef int (*collector_init_func)(struct collector *collector);
-typedef int (*collector_start_func)(struct collector *collector);
-typedef int (*collector_collect_func)(struct collector *collector);
+typedef plugin_result_t (*collector_init_cb)(struct collector *collector);
+typedef plugin_result_t (*collector_start_cb)(struct collector *collector);
+typedef plugin_result_t (*collector_collect_cb)(struct collector *collector);
 
 struct collector {
     char name[COLLECTOR_NAME_SIZE];
@@ -35,9 +36,9 @@ struct collector {
 
     measurement_send_func send_measurement;
 
-    collector_init_func init;
-    collector_start_func start;
-    collector_collect_func collect;
+    collector_init_cb initialize_cb;
+    collector_start_cb start_cb;
+    collector_collect_cb collect_cb;
 };
 
 typedef struct collector collector_t;
@@ -47,9 +48,9 @@ typedef collector_t * collector_ptr_t;
 // Private API
 //
 
-void collector_init(collector_t *collector);
-void collector_start(collector_t *collector);
-void collector_collect(collector_t *collector);
+plugin_result_t collector_initialize(collector_t *collector);
+plugin_result_t collector_start(collector_t *collector);
+plugin_result_t collector_collect(collector_t *collector);
 
 //
 // Public API

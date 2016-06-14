@@ -17,12 +17,14 @@
 #define METER_PLUGIN_COMMON_H
 
 enum plugin_result {
-    SUCCESS,
-    FAIL
+    PLUGIN_SUCCEED,
+    PLUGIN_FAIL
 };
 
 typedef enum plugin_result plugin_result_t;
 
 double rand_range(int min, int max);
+
+#define PLUGIN_FUNCTION_NAME(NAME) fprintf(stderr, "%s: line: %d, %s\n",(NAME), __LINE__, __PRETTY_FUNCTION__);
 
 #endif //METER_PLUGIN_COMMON_H

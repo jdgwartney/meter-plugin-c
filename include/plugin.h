@@ -28,25 +28,11 @@
 
 struct meter_plugin;
 
-enum plugin_handler_type {
-    COLLECT,
-    COLLECT_INIT,
-    INIT,
-    PARAM_INIT,
-    START,
-    STOP
-};
-
-typedef enum plugin_handler_type plugin_handler_type_t;
-
-
-typedef int (*plugin_init_func_t)(struct meter_plugin *plugin);
-typedef int (*plugin_start_func_t)(struct meter_plugin *plugin);
-typedef int (*plugin_stop_func_t)(struct meter_plugin *plugin);
-
-typedef int (*plugin_parameter_func_t)(struct meter_plugin *plugin);
-
-typedef int (*plugin_collector_init_func_t)(struct meter_plugin *plugin, struct collector *collector);
+typedef plugin_result_t (*plugin_initialize_cb_t)(struct meter_plugin *plugin);
+typedef plugin_result_t (*plugin_start_cb_t)(struct meter_plugin *plugin);
+typedef plugin_result_t (*plugin_stop_cb_t)(struct meter_plugin *plugin);
+typedef plugin_result_t (*plugin_parameter_cb_t)(struct meter_plugin *plugin);
+typedef plugin_result_t (*plugin_collector_initialize_cb_t)(struct meter_plugin *plugin, struct collector *collector);
 
 struct meter_plugin {
     char name[PLUGIN_NAME_SIZE+1];
@@ -54,24 +40,22 @@ struct meter_plugin {
     plugin_parameters_t *parameters;
 
     collector_ptr_t * collectors;
-    int num_collectors;
+    size_t num_collectors;
 
     void * user_data;
 
-    plugin_init_func_t init;
-    plugin_start_func_t start;
-    plugin_stop_func_t stop;
-
-    plugin_parameter_func_t param;
-
-    plugin_collector_init_func_t collector_init;
+    plugin_initialize_cb_t initialize_cb;
+    plugin_start_cb_t start_cb;
+    plugin_stop_cb_t stop_cb;
+    plugin_parameter_cb_t parameters_cb;
+    plugin_collector_initialize_cb_t collector_initialize_cb;
 };
 
 typedef struct meter_plugin meter_plugin_t;
 
 meter_plugin_t * plugin_create();
 
-int plugin_run(meter_plugin_t *plugin);
+plugin_result_t plugin_run(meter_plugin_t *plugin);
 
 
 

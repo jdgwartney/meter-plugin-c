@@ -23,7 +23,7 @@
  *
  */
 static void plugin_initialize(meter_plugin_t *plugin) {
-    memset(plugin,'\0', sizeof(meter_plugin_t));
+    memset(plugin, '\0', sizeof(meter_plugin_t));
 }
 
 /** \brief Allocates a plugin structure and initializes
@@ -39,14 +39,15 @@ meter_plugin_t *plugin_create() {
 /** \brief Calls the plugin provided plugin init method if registered
  *
  */
-int plugin_init(meter_plugin_t *plugin) {
-    int result = 0;
+plugin_result_t plugin_INITIALIZE(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
+    assert(plugin);
+
     // If an initialization method has been registered call it
-    if (plugin->init) {
-        if (plugin->init(plugin)) {
+    if (plugin->initialize_cb && plugin->initialize_cb(plugin) == PLUGIN_FAIL) {
             fprintf(stderr, "Plugin initialization function failed\n");
-            result = 1;
-        }
+            result = PLUGIN_FAIL;
     }
     return result;
 }
@@ -54,14 +55,15 @@ int plugin_init(meter_plugin_t *plugin) {
 /** \brief Calls the plugin provided plugin start method if registered
  *
  */
-int plugin_start(meter_plugin_t *plugin) {
-    int result = 0;
+plugin_result_t plugin_START(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
+    assert(plugin);
+
     // If an start method has been registered call it
-    if (plugin->start) {
-        if (plugin->start(plugin)) {
+    if (plugin->start_cb && plugin->start_cb(plugin) == PLUGIN_FAIL) {
             fprintf(stderr, "Plugin start function failed\n");
-            result = 1;
-        }
+            result = PLUGIN_FAIL;
     }
     return result;
 }
@@ -69,42 +71,62 @@ int plugin_start(meter_plugin_t *plugin) {
 /** \brief Create collectors for each of the parameter items
  *
  */
-void plugin_create_collectors(meter_plugin_t *plugin, plugin_parameters_t *parameters) {
+int plugin_COLLECTORS_CREATE(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
 
-    size_t size = parameters->size;
-    plugin->collectors = malloc(sizeof(collector_ptr_t) * size);
-    assert(plugin->collectors != NULL);
+    assert(plugin);
+    assert(plugin->parameters);
+    fprintf(stderr,"size: %zu\n", plugin->parameters->size);
 
+    size_t size = plugin->parameters->size;
+    collector_ptr_t *collectors = malloc(sizeof(collector_ptr_t) * size);
+    assert(collectors);
+
+    plugin_parameters_t *parameters = plugin->parameters;
     for (int i = 0; i < size; i++) {
         parameter_item_t *items = parameters->items[i];
-        char name[COLLECTOR_NAME_SIZE];
-        sprintf(name, "collector #%d", i);
-        collector_t *collector = collector_create(items);
-        if (plugin->collector_init) {
-            plugin->collector_init(plugin, collector);
-        }
-        plugin->collectors[i] = collector;
+        collector_t * collector = collector_create(items);
+        plugin->collector_initialize_cb(plugin, collector);
+        collectors[i] = collector;
     }
+
+    plugin->collectors = collectors;
+    plugin->num_collectors = size;
+    fprintf(stderr,"size: %zu\n", plugin->num_collectors);
+
+    return result;
 }
 
 /** \brief Calls the collector initialization method on each of the collectors
  *
  */
-void plugin_init_collectors(meter_plugin_t *plugin) {
+plugin_result_t plugin_COLLECTORS_INITIALIZE(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
+    assert(plugin);
+
     size_t size = plugin->num_collectors;
     collector_ptr_t *collectors = plugin->collectors;
+    fprintf(stderr, "%zu\n", size);
 
     for (size_t i = 0; i < size; i++) {
         collector_t *collector = collectors[i];
-        collector_init(collector);
+        if (collector_initialize(collector) == PLUGIN_FAIL) {
+            result = PLUGIN_FAIL;
+            break;
+        }
     }
+    return result;
 }
-
 
 /** \brief Calls the collector initialization method on each of the collectors
  *
  */
-void plugin_start_collectors(meter_plugin_t *plugin) {
+plugin_result_t plugin_COLLECTORS_START(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
+    assert(plugin);
+
     size_t size = plugin->num_collectors;
     collector_ptr_t *collectors = plugin->collectors;
 
@@ -112,51 +134,125 @@ void plugin_start_collectors(meter_plugin_t *plugin) {
         collector_t *collector = collectors[i];
         collector_start(collector);
     }
+
+    return result;
 }
+
+/** \brief Read and parse the plugin parameters
+ *
+ */
+plugin_result_t plugin_PARAMETERS_LOAD(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
+    assert(plugin);
+    // Load the plugin configuration from "param.json"
+    plugin_parameters_t *parameters = parameter_load(PARAMETERS_DEFAULT_PATH);
+    if (parameters) {
+        plugin->parameters = parameters;
+        plugin->num_collectors = parameters->size;
+    }
+    else {
+        fprintf(stderr, "Unable to load plugin parameters\n");
+        result = PLUGIN_FAIL;
+    }
+
+    return result;
+}
+
+/** \brief Calls the plugin provided plugin start method if registered
+ *
+ */
+plugin_result_t plugin_PARAMETERS_LOADED(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
+    assert(plugin);
+
+    // If an parameter method has been registered call it
+    if (plugin->parameters_cb && plugin->parameters_cb(plugin) == PLUGIN_FAIL) {
+        fprintf(stderr, "Plugin parameters function failed\n");
+        result = PLUGIN_FAIL;
+    }
+    return result;
+}
+
+/** \break Run the plugin collection
+ *
+ */
+plugin_result_t plugin_RUN(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+
+    size_t count = plugin->num_collectors;
+    int collect_measurements = 1;
+
+    while (collect_measurements) {
+        // Loop through the collectors and call eaches respective collection method
+        for (int i = 0; i < count; i++) {
+            collector_t *collector = plugin->collectors[i];
+            if (collector_collect(collector) == PLUGIN_FAIL) {
+                collect_measurements = 0;
+                break;
+            }
+        }
+        sleep(1);
+    }
+    return result;
+}
+
+enum plugin_states {
+    PLUGIN_INITIALIZE,
+    PLUGIN_PARAMETERS_LOAD,
+    PLUGIN_PARAMETERS_LOADED,
+    PLUGIN_COLLECTORS_CREATE,
+    PLUGIN_COLLECTORS_INITIALIZE,
+    PLUGIN_START,
+    PLUGIN_COLLECTORS_START,
+    PLUGIN_RUN,
+    PLUGIN_EXIT,
+    PLUGIN_ERROR
+};
+
+typedef enum plugin_states plugin_state_t;
+
+#define NEXT_PLUGIN_STATE(FUNCTION, SUCCESS, FAILURE) (FUNCTION) == PLUGIN_SUCCEED ? (SUCCESS) : (FAILURE)
 
 /** /brief Main plugin function for processing measurements
  *
  */
-int plugin_run(meter_plugin_t *plugin) {
+plugin_result_t plugin_run(meter_plugin_t *plugin) {
+    plugin_result_t result = PLUGIN_SUCCEED;
+    plugin_state_t state = PLUGIN_INITIALIZE;
 
-    // Initialize the plugin
-    if (plugin_init(plugin)) {
-        exit(1);
-    }
-
-    // Start the plugin
-    if (plugin_start(plugin)) {
-        exit(1);
-    }
-
-    // Load the plugin configuration from "param.json"
-    plugin_parameters_t *parameters = parameter_load(DEFAULT_PARAMETERS_PATH);
-    assert(parameters != NULL);
-    plugin->parameters = parameters;
-    plugin->num_collectors = parameters->size;
-
-    // If an param method has been registered call it
-    if (plugin->param) {
-        if (plugin->param(plugin)) {
-            fprintf(stderr, "Plugin parameter function failed\n");
-            exit(1);
+    while (state != PLUGIN_EXIT) {
+        switch (state) {
+            case PLUGIN_INITIALIZE:
+                state = NEXT_PLUGIN_STATE(plugin_INITIALIZE(plugin), PLUGIN_PARAMETERS_LOAD, PLUGIN_ERROR);
+                break;
+            case PLUGIN_PARAMETERS_LOAD:
+                state = NEXT_PLUGIN_STATE(plugin_PARAMETERS_LOAD(plugin), PLUGIN_PARAMETERS_LOADED, PLUGIN_ERROR);
+                break;
+            case PLUGIN_PARAMETERS_LOADED:
+                state = NEXT_PLUGIN_STATE(plugin_PARAMETERS_LOADED(plugin), PLUGIN_COLLECTORS_CREATE, PLUGIN_ERROR);
+                break;
+            case PLUGIN_COLLECTORS_CREATE:
+                state = NEXT_PLUGIN_STATE(plugin_COLLECTORS_CREATE(plugin), PLUGIN_COLLECTORS_INITIALIZE, PLUGIN_ERROR);
+                break;
+            case PLUGIN_COLLECTORS_INITIALIZE:
+                state = NEXT_PLUGIN_STATE(plugin_COLLECTORS_INITIALIZE(plugin), PLUGIN_START, PLUGIN_ERROR);
+                break;
+            case PLUGIN_START:
+                state = NEXT_PLUGIN_STATE(plugin_START(plugin), PLUGIN_COLLECTORS_START, PLUGIN_ERROR);
+                break;
+            case PLUGIN_COLLECTORS_START:
+                state = NEXT_PLUGIN_STATE(plugin_COLLECTORS_START(plugin), PLUGIN_RUN, PLUGIN_ERROR);
+                break;
+            case PLUGIN_RUN:
+                state = NEXT_PLUGIN_STATE(plugin_RUN(plugin), PLUGIN_START, PLUGIN_EXIT);
+                break;
+            case PLUGIN_ERROR:
+                state = PLUGIN_EXIT;
+                break;
+            default:
+                break;
         }
-    }
-
-
-    // Create a collector for each of plugin parameter "items"
-    plugin_create_collectors(plugin, parameters);
-
-    // Start each of the collectors by calling their start method
-    plugin_start_collectors(plugin);
-
-    int count = plugin->num_collectors;
-    while (1) {
-        // Loop through the collectors and call eaches respective collection method
-        for (int i = 0; i < count; i++) {
-            collector_t *collector = plugin->collectors[i];
-            collector_collect(collector);
-        }
-        sleep(1);
     }
 }
