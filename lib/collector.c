@@ -17,8 +17,9 @@
 #include <string.h>
 #include "collector.h"
 
-/** \brief Calls our collectors init method
+/** @brief Calls our collectors initialize method
  *
+ *  @param collector Instance of a collector to call its initialize method up
  */
 plugin_result_t collector_initialize(collector_t *collector) {
     plugin_result_t result = PLUGIN_SUCCEED;
@@ -46,7 +47,7 @@ plugin_result_t collector_start(collector_t *collector) {
 }
 
 /** \brief Calls our collectors collect method
- *
+ * \typedef collector_t
  */
 plugin_result_t collector_collect(collector_t *collector) {
     plugin_result_t result = PLUGIN_SUCCEED;
@@ -63,7 +64,7 @@ plugin_result_t collector_collect(collector_t *collector) {
 
 
 /**
- * /brief Create a collector object
+ * \brief Create a collector object
  */
 collector_t *collector_create(parameter_item_t *item) {
     collector_t *collector = malloc(sizeof(collector_t));
