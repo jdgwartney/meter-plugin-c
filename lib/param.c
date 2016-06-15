@@ -98,7 +98,7 @@ param_boolean_t parameter_get_boolean(parameter_item_t *item, const char *key) {
     json_t * json = json_object_get(item, key);
     assert(json);
     assert(json_typeof(json) == JSON_TRUE || json_typeof(json) == JSON_FALSE);
-    return json_boolean_value(json);
+    return json_is_true(json);
 }
 
 param_integer_t parameter_get_integer(parameter_item_t *item, const char *key) {
