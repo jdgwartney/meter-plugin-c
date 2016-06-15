@@ -24,10 +24,16 @@
 
 struct collector;
 
+/** \brief Function pointer type for initializing a collector
+ *
+ */
 typedef plugin_result_t (*collector_init_cb)(struct collector *collector);
 typedef plugin_result_t (*collector_start_cb)(struct collector *collector);
 typedef plugin_result_t (*collector_collect_cb)(struct collector *collector);
 
+/** \brief Structure that implements a meter plugin collector
+ *
+ */
 struct collector {
     char name[COLLECTOR_NAME_SIZE];
     parameter_item_t * item;
