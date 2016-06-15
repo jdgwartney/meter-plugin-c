@@ -1,35 +1,19 @@
-TrueSight Pulse Example Meter Plugin
-====================================
+TrueSight Pulse Meter Plugin SDK for C
+======================================
 
-Meter plugin that uses the c language to collect data from a UDP listening port.
+Implements a framework in the C programming language to create TrueSight Pulse meter plugins.
 
-### Prerequisites
+### Supported Platforms
 
-|     OS    | Linux | Windows | SmartOS | OS X |
-|:----------|:-----:|:-------:|:-------:|:----:|
-| Supported |   v   |    v    |    v    |  v   |
+Can be used on all platforms that support a POSIX compiler chain
 
-### Plugin Setup
+### Installation
 
-None
 
-### Plugin Configuration Fields
+### Example Plugins
 
-|Field Name   |Description                             |
-|:------------|:---------------------------------------|
-|Source       |Source to use for measurements          |
-|Interval     |How often to send measurement in seconds|
+The following are links to examples that use this framework for a meter plugin:
 
-### Metrics Collected
+- Random - Generates measurements for a metric by generating random numbers
+- UDP Metric - Collects measurements from UDP server
 
-|Metric Name     |Description                                    |
-|:---------------|:----------------------------------------------|
-|EXAMPLE\_COUNT|Metric definition for the tutorial meter plugin|
-
-### Dashboards
-
-- Tutorial
-
-### References
-
-None
