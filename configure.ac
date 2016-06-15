@@ -14,7 +14,7 @@
 #  limitations under the License.
 
 AC_PREREQ([2.64])
-AC_INIT([meter-plugin], [1.0])
+AC_INIT([meter-plugin], [0.0.1])
 # Init automake, and specify this program use relaxed structures.
 # i.e. this program doesn't follow the gnu coding standards, and doesn't have
 # ChangeLog, COPYING, AUTHORS, INSTALL, README etc. files.
