@@ -25,7 +25,7 @@ LT_PREREQ([2.2])
 LT_INIT([dlopen])
 
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_HEADERS(config.h[])
+AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC_C99
 AC_CHECK_LIB(m, floor)
 AC_CHECK_LIB(jansson, json_load_file)
