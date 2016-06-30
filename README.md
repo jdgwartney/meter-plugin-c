@@ -35,7 +35,7 @@ $ brew install jansson
 1. Download distribution to the target platform:
 
     ```bash
-    $ wget https://github.com/boundary/meter-plugin-sdk-c/releases/download/v0.1.0/meter-plugin-0.1.0.tar.gz
+    $ wget https://github.com/boundary/meter-plugin-sdk-c/releases/download/v0.1.0/meter-plugin-0.2.0.tar.gz
     ```
 2. Extract distribution:
 
@@ -46,7 +46,7 @@ $ brew install jansson
 3. Change directory to extracted distribution:
 
    ```bash
-   $ cd meter-plugin-0.1.0
+   $ cd meter-plugin-0.2.0
    ```
 
 4. Configure meter plugin SDK for compilation
