@@ -40,7 +40,7 @@ $ brew install jansson
 2. Extract distribution:
 
    ```bash
-   $ tar xvf
+   $ tar xvf meter-plugin-0.2.tar.gz
    ```
 
 3. Change directory to extracted distribution:
