@@ -76,6 +76,58 @@ Code Layout
 Code layout is simple and naming mirrors the key abstractions:
 
 ```
+├── AUTHORS
+├── CMakeLists.txt
+├── COPYING
+├── ChangeLog
+├── Doxyfile
+├── INSTALL
+├── LICENSE
+├── Makefile.am
+├── NEWS
+├── README
+├── README.md
+├── autogen.sh
+├── configure.ac
+├── docs
+│   ├── development
+│   │   └── index.md
+│   ├── examples
+│   │   ├── hello.md
+│   │   ├── random.md
+│   │   ├── raspberry_pi.md
+│   │   └── udp.md
+│   ├── index.md
+│   ├── install
+│   │   └── index.md
+│   └── tutorial
+│       ├── index.md
+│       └── install_meter.md
+├── getting_started.md
+├── include
+│   ├── Makefile.am
+│   ├── collector.h
+│   ├── common.h
+│   ├── event.h
+│   ├── log.h
+│   ├── measurement.h
+│   ├── metric.h
+│   ├── param.h
+│   └── plugin.h
+├── lib
+│   ├── Makefile.am
+│   ├── collector.c
+│   ├── common.c
+│   ├── event.c
+│   ├── log.c
+│   ├── measurement.c
+│   ├── metric.c
+│   ├── param.c
+│   └── plugin.c
+├── mkdocs.yml
+```
+
+```
 |-- docs
     | development
       ...

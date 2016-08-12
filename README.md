@@ -10,7 +10,7 @@ See [Installation](docs/install/index.md)
 
 ### Plugin Development
 
-See [Getting Started](getting_started.md)
+See [Getting Started](docs/getting_started.md)
 
 ### Development
 

@@ -12,3 +12,4 @@ pages:
     - Random: 'examples/random.md'
     - UDP: 'examples/udp.md'
     - Raspberry Pi: 'examples/raspberry_pi.md'
+- Deploy Meter to Raspberry Pi: 'tutorial/install_meter.md'
