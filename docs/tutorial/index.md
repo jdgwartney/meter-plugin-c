@@ -26,7 +26,7 @@ the meter plugin SDK in C.
 plugin.
 2. Define the metrics to be used by the plugin in `metrics.json`
 3. Create the plugin manifest with metadata describing the plugin in `plugin.json`
-4. Implement the code of the meter plugin.
+4. Implement the code of the meter plugin (add callbacks).
 5. Build the binary that represents your plugin
 6. Add the plugin to your account as a private plugin
 7. Install the meter plugin binary on the target system
