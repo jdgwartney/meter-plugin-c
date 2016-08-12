@@ -197,6 +197,8 @@ plugin_result_t plugin_RUN(meter_plugin_t *plugin) {
                 break;
             }
         }
+        // TODO: The interval to get the measurements are always 1 second regardless of
+        // plugins settings.
         sleep(1);
     }
     return result;
