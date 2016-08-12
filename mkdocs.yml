@@ -8,7 +8,6 @@ pages:
 - Tutorial: 'tutorial/index.md'
 - Development: 'development/index.md'
 - Examples:
-    - Hello: 'examples/hello.md' 
     - Random: 'examples/random.md'
     - UDP: 'examples/udp.md'
     - Raspberry Pi: 'examples/raspberry_pi.md'

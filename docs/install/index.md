@@ -28,7 +28,7 @@ Extracting the SDK
 We use the GNU tar to extract the compressed tar file so that we can build
 and installed the SDK
 
-1. Extract the software by runing the following:
+1. Extract the software by running the following:
 
     ```
     $ tar xvf meter-plugin-0.2.0.tar.gz

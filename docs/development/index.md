@@ -8,7 +8,7 @@ some details to get started with respect:
 - Code Layout
 - Tooling
 
-Each of the above topics will be convered in kind in sections below.
+Each of the above topics will be covered in kind in sections below.
 
 Code Design
 -----------
@@ -128,11 +128,11 @@ Code layout is simple and naming mirrors the key abstractions:
 Tooling
 -------
 
-Development work requires the installation of the autoconf and libtools.
+Development work requires the installation of the _autoconf_ and _libtools_.
 
 These additional tools can help in with development:
 
-- [jsonlint] - Validates and beautifies JSON documents
-- [grip] - Accurate preview of markdown files for documentation or READMEs
-- [mkdocs] - Documentation framework that uses markdown develop themed documentation
+- [jsonlint](https://github.com/zaach/jsonlint) - Validates and beautifies JSON documents
+- [grip](https://github.com/joeyespo/grip) - Accurate preview of markdown files for documentation or READMEs
+- [mkdocs](http://www.mkdocs.org/) - Documentation framework that uses markdown develop themed documentation
 
