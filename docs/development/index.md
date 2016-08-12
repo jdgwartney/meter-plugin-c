@@ -103,7 +103,6 @@ Code layout is simple and naming mirrors the key abstractions:
 │   └── tutorial
 │       ├── index.md
 │       └── install_meter.md
-├── getting_started.md
 ├── include
 │   ├── Makefile.am
 │   ├── collector.h
