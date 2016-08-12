@@ -7,8 +7,5 @@ pages:
 - Installation: 'install/index.md'
 - Tutorial: 'tutorial/index.md'
 - Development: 'development/index.md'
-- Examples:
-    - Random: 'examples/random.md'
-    - UDP: 'examples/udp.md'
-    - Raspberry Pi: 'examples/raspberry_pi.md'
+- Examples: 'examples/index.md'
 - Deploy Meter to Raspberry Pi: 'tutorial/install_meter.md'
