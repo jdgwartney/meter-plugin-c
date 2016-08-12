@@ -7,7 +7,6 @@ some details to get started with respect:
 - Code Design
 - Code Layout
 - Tooling
-- Documentation
 
 Each of the above topics will be convered in kind in sections below.
 
@@ -77,7 +76,6 @@ Code layout is simple and naming mirrors the key abstractions:
 
 ```
 ├── AUTHORS
-├── CMakeLists.txt
 ├── COPYING
 ├── ChangeLog
 ├── Doxyfile
@@ -97,6 +95,7 @@ Code layout is simple and naming mirrors the key abstractions:
 │   │   ├── random.md
 │   │   ├── raspberry_pi.md
 │   │   └── udp.md
+│   ├── getting_started.md
 │   ├── index.md
 │   ├── install
 │   │   └── index.md
@@ -123,45 +122,17 @@ Code layout is simple and naming mirrors the key abstractions:
 │   ├── metric.c
 │   ├── param.c
 │   └── plugin.c
-├── mkdocs.yml
+└── mkdocs.yml
 ```
-
-```
-|-- docs
-    | development
-      ...
-    | examples
-      ...
-    | install
-      ...
-    | tutorial
-      ...
-|-- include
-    |-- collector.h
-    |-- common.h
-    |-- event.h
-    |-- log.h
-    |-- measurement.c
-    |-- metric.c
-    |-- param.c
-    |-- plugin.c
-|-- lib
-    |-- collector.c
-    |-- common.c
-    |-- event.c
-    |-- log.c
-    |-- measurement.c
-    |-- metric.c
-    |-- param.c
-    |-- plugin.c
-```
-
 
 Tooling
 -------
 
-jsonlint
+Development work requires the installation of the autoconf and libtools.
 
-apt-get install -y npm
+These additional tools can help in with development:
 
-$ sudo npm -g install jsonlint
+- [jsonlint] - Validates and beautifies JSON documents
+- [grip] - Accurate preview of markdown files for documentation or READMEs
+- [mkdocs] - Documentation framework that uses markdown develop themed documentation
+
