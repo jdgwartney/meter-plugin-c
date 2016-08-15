@@ -17,5 +17,5 @@ The current working around is run the following commands on the Raspberry Pi:
 2. Run the following command to install the meter:
 
     ```
-    $ curl -fsS 'https://gist.githubusercontent.com/jdgwartney/07cb3eab201755245f2905b6bc45ecd2/raw/a5733275cc9259a0453030863bb21cff1850c790/pi-install.sh | bash 
+    $ curl -fsS 'https://gist.githubusercontent.com/jdgwartney/07cb3eab201755245f2905b6bc45ecd2/raw/42d66c1fcc7a6a93ceb52fd528d5054fffab0932/pi-install.sh' | bash 
     ```
